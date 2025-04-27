@@ -8,6 +8,22 @@ import LogoAnimation from "../brand/LogoAnimation";
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const headerOffset = 80; // Height of the fixed header
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+    setMobileMenuOpen(false);
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b bg-white">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
@@ -17,30 +33,34 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6">
-          <Link 
-            to="/" 
-            className="text-enedis-gray-700 hover:text-enedis-blue font-medium cursor-pointer"
-          >
-            Accueil
-          </Link>
-          <Link 
-            to="/#services" 
+          <a 
+            href="#services" 
+            onClick={(e) => scrollToSection(e, "services")}
             className="text-enedis-gray-700 hover:text-enedis-blue font-medium cursor-pointer"
           >
             Nos Services
-          </Link>
-          <Link 
-            to="/#about" 
+          </a>
+          <a 
+            href="#about" 
+            onClick={(e) => scrollToSection(e, "about")}
             className="text-enedis-gray-700 hover:text-enedis-blue font-medium cursor-pointer"
           >
             À propos
-          </Link>
-          <Link 
-            to="/#contact" 
+          </a>
+          <a 
+            href="#demande" 
+            onClick={(e) => scrollToSection(e, "demande")}
+            className="text-enedis-gray-700 hover:text-enedis-blue font-medium cursor-pointer"
+          >
+            Faire ma demande
+          </a>
+          <a 
+            href="#contact" 
+            onClick={(e) => scrollToSection(e, "contact")}
             className="text-enedis-gray-700 hover:text-enedis-blue font-medium cursor-pointer"
           >
             Contact
-          </Link>
+          </a>
           <Button 
             variant="default"
             className="bg-enedis-blue hover:bg-blue-700 text-white cursor-pointer"
@@ -62,34 +82,34 @@ const Header = () => {
         {mobileMenuOpen && (
           <nav className="md:hidden absolute top-full left-0 right-0 bg-white py-4 px-4 border-t shadow-lg z-40">
             <div className="flex flex-col space-y-4">
-              <Link 
-                to="/" 
+              <a 
+                href="#services" 
+                onClick={(e) => scrollToSection(e, "services")}
                 className="text-enedis-gray-700 hover:text-enedis-blue font-medium py-2 cursor-pointer"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Accueil
-              </Link>
-              <Link 
-                to="/#services" 
-                className="text-enedis-gray-700 hover:text-enedis-blue font-medium py-2 cursor-pointer"
-                onClick={() => setMobileMenuOpen(false)}
               >
                 Nos Services
-              </Link>
-              <Link 
-                to="/#about" 
+              </a>
+              <a 
+                href="#about" 
+                onClick={(e) => scrollToSection(e, "about")}
                 className="text-enedis-gray-700 hover:text-enedis-blue font-medium py-2 cursor-pointer"
-                onClick={() => setMobileMenuOpen(false)}
               >
                 À propos
-              </Link>
-              <Link 
-                to="/#contact" 
+              </a>
+              <a 
+                href="#demande" 
+                onClick={(e) => scrollToSection(e, "demande")}
                 className="text-enedis-gray-700 hover:text-enedis-blue font-medium py-2 cursor-pointer"
-                onClick={() => setMobileMenuOpen(false)}
+              >
+                Faire ma demande
+              </a>
+              <a 
+                href="#contact" 
+                onClick={(e) => scrollToSection(e, "contact")}
+                className="text-enedis-gray-700 hover:text-enedis-blue font-medium py-2 cursor-pointer"
               >
                 Contact
-              </Link>
+              </a>
               <Button 
                 variant="default"
                 className="bg-enedis-blue hover:bg-blue-700 text-white w-full cursor-pointer"

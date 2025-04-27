@@ -19,6 +19,11 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Lato', 'sans-serif'],
+				serif: ['Playfair Display', 'serif'],
+				playfair: ['Playfair Display', 'serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -80,6 +85,16 @@ export default {
 						800: '#262626',
 						900: '#171717',
 					}
+				},
+				// French-themed color palette
+				france: {
+					navy: '#000F44',
+					red: '#E30613',
+					cream: '#F8F4E9',
+					gold: '#D4AF37',
+					blueLight: '#D5E0FC',
+					blueMedium: '#5A73FC',
+					redLight: '#FFE5E8',
 				}
 			},
 			borderRadius: {
@@ -123,6 +138,11 @@ export default {
 				fadeIn: 'fadeIn 0.5s ease-out forwards',
 				slideUp: 'slideUp 0.5s ease-out forwards',
 				slideDown: 'slideDown 0.5s ease-out forwards',
+			},
+			backgroundImage: {
+				'french-pattern': "url('/patterns/french-pattern.svg')",
+				'haussmann': "url('/patterns/haussmann-pattern.svg')",
+				'art-nouveau': "url('/patterns/art-nouveau-pattern.svg')",
 			}
 		}
 	},

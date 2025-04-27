@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 40 30% 97%; /* F8F4E9 - cream background */
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -14,13 +14,13 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Adjust primary to match Enedis blue */
-    --primary: 207 100% 34%;
+    /* Adjust primary to match French navy */
+    --primary: 225 100% 13%; /* #000F44 */
     --primary-foreground: 0 0% 100%;
 
-    /* Adjust secondary to match Enedis green */
-    --secondary: 79 73% 44%;
-    --secondary-foreground: 0 0% 0%;
+    /* Adjust secondary to match French red */
+    --secondary: 356 93% 46%; /* #E30613 */
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -33,31 +33,31 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 207 100% 34%;
+    --ring: 225 100% 13%; /* #000F44 */
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-background: 225 100% 13%; /* #000F44 */
+    --sidebar-foreground: 40 30% 97%; /* #F8F4E9 */
+    --sidebar-primary: 356 93% 46%; /* #E30613 */
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
+    --sidebar-accent: 43 74% 52%; /* #D4AF37 */
+    --sidebar-accent-foreground: 225 100% 13%;
+    --sidebar-border: 43 74% 52%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 225 100% 13%; /* #000F44 */
+    --foreground: 40 30% 97%; /* #F8F4E9 */
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 207 100% 34%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 79 73% 44%;
-    --secondary-foreground: 0 0% 0%;
+    --primary: 43 74% 52%; /* #D4AF37 */
+    --primary-foreground: 225 100% 13%; /* #000F44 */
+    --secondary: 356 93% 46%; /* #E30613 */
+    --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
     --accent: 217.2 32.6% 17.5%;
@@ -66,14 +66,14 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --ring: 43 74% 52%; /* #D4AF37 */
+    --sidebar-background: 40 30% 97%; /* #F8F4E9 */
+    --sidebar-foreground: 225 100% 13%; /* #000F44 */
+    --sidebar-primary: 356 93% 46%; /* #E30613 */
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-accent: 43 74% 52%; /* #D4AF37 */
+    --sidebar-accent-foreground: 225 100% 13%;
+    --sidebar-border: 43 74% 52%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
@@ -85,6 +85,28 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-playfair;
+  }
+
+  /* French-inspired decorative elements */
+  .french-divider {
+    @apply relative my-8 h-px bg-gradient-to-r from-transparent via-france-gold to-transparent;
+  }
+
+  .french-divider::before,
+  .french-divider::after {
+    @apply content-[''] absolute w-2 h-2 rounded-full bg-france-gold top-1/2 transform -translate-y-1/2;
+  }
+
+  .french-divider::before {
+    @apply left-1/4;
+  }
+
+  .french-divider::after {
+    @apply right-1/4;
   }
 }
 
@@ -109,4 +131,91 @@
   opacity: 0;
   transform: translateX(-20px);
   transition: opacity 300ms, transform 300ms;
+}
+
+/* French-specific formatting classes */
+.fr-date::before {
+  content: attr(data-day) "/" attr(data-month) "/" attr(data-year);
+}
+
+.fr-number {
+  @apply tabular-nums;
+}
+
+.fr-number::before {
+  content: attr(data-value);
+  @apply whitespace-nowrap;
+}
+
+/* French UI Elements */
+.fr-card {
+  @apply bg-white rounded-md border border-gray-200 shadow-sm p-6 relative overflow-hidden;
+  background-image: linear-gradient(to bottom right, rgba(248, 244, 233, 0.5), rgba(255, 255, 255, 1));
+}
+
+.fr-card::before {
+  @apply content-[''] absolute top-0 left-0 w-full h-1;
+  background: linear-gradient(to right, #000F44, #E30613, #D4AF37);
+}
+
+/* Tooltip styling for French terms */
+.fr-tooltip {
+  @apply relative inline-block cursor-help border-b border-dotted border-gray-400;
+}
+
+.fr-tooltip .fr-tooltip-text {
+  @apply invisible absolute z-10 w-60 bg-france-navy text-white text-sm px-3 py-2 rounded-md bottom-full left-1/2 transform -translate-x-1/2 -translate-y-2 opacity-0 transition-opacity duration-300;
+}
+
+.fr-tooltip:hover .fr-tooltip-text {
+  @apply visible opacity-100;
+}
+
+/* French form styles */
+.fr-input {
+  @apply border-b border-france-navy bg-transparent focus:border-france-gold focus:ring-0 px-2 py-1;
+}
+
+.fr-label {
+  @apply text-sm font-medium text-france-navy;
+}
+
+.fr-button-primary {
+  @apply bg-france-navy text-white hover:bg-blue-900 focus:ring-2 focus:ring-france-gold;
+}
+
+.fr-button-secondary {
+  @apply bg-france-cream text-france-navy border border-france-navy hover:bg-gray-100;
+}
+
+.fr-button-accent {
+  @apply bg-france-red text-white hover:bg-red-700;
+}
+
+/* French-inspired pattern backgrounds */
+.bg-pattern-light {
+  background-color: rgba(248, 244, 233, 0.5);
+  background-image: url('/patterns/french-pattern.svg');
+  background-size: 100px 100px;
+}
+
+.bg-haussmann {
+  background-image: url('/patterns/haussmann-pattern.svg');
+  background-size: 200px 200px;
+}
+
+.bg-art-nouveau {
+  background-image: url('/patterns/art-nouveau-pattern.svg');
+  background-size: 200px 200px;
+}
+
+/* Phone number formatting */
+.fr-phone::before {
+  content: attr(data-prefix) " " attr(data-p1) " " attr(data-p2) " " attr(data-p3) " " attr(data-p4) " " attr(data-p5);
+  @apply whitespace-nowrap;
+}
+
+/* Postal code validation style */
+.fr-postal-code:valid {
+  @apply border-green-500;
 }

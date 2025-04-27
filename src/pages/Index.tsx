@@ -1,32 +1,22 @@
-
 import MultiStepForm from "@/components/forms/MultiStepForm";
 import { Check, Info, MapPin, Phone, Mail, Calendar, Clock, FileText } from "lucide-react";
-
 const Index = () => {
-  return (
-    <div className="min-h-screen bg-pattern-light">
+  return <div className="min-h-screen bg-pattern-light">
       <section className="bg-gradient-to-b from-france-navy to-blue-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-haussmann"></div>
         <div className="container mx-auto px-4 py-16 md:py-24 relative">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold mb-4">
-              Raccordement électrique pour votre projet
-            </h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold mb-4">Le raccordement Enedis
+Simple, rapide et efficace</h1>
             <div className="french-divider my-6"></div>
             <p className="text-lg md:text-xl opacity-90 mb-8">
               Simple, rapide et transparent. Demandez votre raccordement électrique en quelques clics.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a 
-                href="#demande"
-                className="fr-button-primary px-8 py-3 rounded-md font-medium transition-colors"
-              >
+              <a href="#demande" className="fr-button-primary px-8 py-3 rounded-md font-medium transition-colors">
                 Faire une demande
               </a>
-              <a 
-                href="#services"
-                className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-md font-medium hover:bg-white/10 transition-colors"
-              >
+              <a href="#services" className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-md font-medium hover:bg-white/10 transition-colors">
                 Nos services
               </a>
             </div>
@@ -107,34 +97,27 @@ const Index = () => {
             <div className="space-y-8 relative">
               <div className="absolute left-8 top-8 bottom-0 w-0.5 bg-france-navy opacity-20 hidden md:block"></div>
               
-              {[
-                {
-                  step: "01",
-                  title: "Soumission de la demande",
-                  description: "Remplissez le formulaire en ligne avec les détails de votre projet et vos coordonnées."
-                },
-                {
-                  step: "02",
-                  title: "Étude technique",
-                  description: "Nos experts analysent votre demande et évaluent les besoins techniques spécifiques."
-                },
-                {
-                  step: "03",
-                  title: "Proposition technique et financière",
-                  description: "Vous recevez un devis détaillé et personnalisé pour votre raccordement."
-                },
-                {
-                  step: "04",
-                  title: "Travaux de raccordement",
-                  description: "Nos techniciens réalisent les travaux selon le planning convenu."
-                },
-                {
-                  step: "05",
-                  title: "Mise en service",
-                  description: "Une fois les travaux terminés, nous procédons à la mise en service de votre raccordement."
-                }
-              ].map((item, index) => (
-                <div key={index} className="flex">
+              {[{
+              step: "01",
+              title: "Soumission de la demande",
+              description: "Remplissez le formulaire en ligne avec les détails de votre projet et vos coordonnées."
+            }, {
+              step: "02",
+              title: "Étude technique",
+              description: "Nos experts analysent votre demande et évaluent les besoins techniques spécifiques."
+            }, {
+              step: "03",
+              title: "Proposition technique et financière",
+              description: "Vous recevez un devis détaillé et personnalisé pour votre raccordement."
+            }, {
+              step: "04",
+              title: "Travaux de raccordement",
+              description: "Nos techniciens réalisent les travaux selon le planning convenu."
+            }, {
+              step: "05",
+              title: "Mise en service",
+              description: "Une fois les travaux terminés, nous procédons à la mise en service de votre raccordement."
+            }].map((item, index) => <div key={index} className="flex">
                   <div className="mr-8">
                     <div className="w-16 h-16 bg-france-navy text-white rounded-full flex items-center justify-center font-bold text-xl relative z-10">
                       {item.step}
@@ -144,8 +127,7 @@ const Index = () => {
                     <h3 className="text-xl font-playfair font-semibold mb-1">{item.title}</h3>
                     <p className="text-gray-600">{item.description}</p>
                   </div>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
         </div>
@@ -293,46 +275,23 @@ const Index = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="name" className="block text-sm fr-label mb-1">Nom</label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="fr-input w-full"
-                      placeholder="Votre nom"
-                    />
+                    <input type="text" id="name" className="fr-input w-full" placeholder="Votre nom" />
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm fr-label mb-1">Email</label>
-                    <input
-                      type="email"
-                      id="email"
-                      className="fr-input w-full"
-                      placeholder="Votre email"
-                    />
+                    <input type="email" id="email" className="fr-input w-full" placeholder="Votre email" />
                   </div>
                 </div>
                 <div>
                   <label htmlFor="subject" className="block text-sm fr-label mb-1">Sujet</label>
-                  <input
-                    type="text"
-                    id="subject"
-                    className="fr-input w-full"
-                    placeholder="Sujet du message"
-                  />
+                  <input type="text" id="subject" className="fr-input w-full" placeholder="Sujet du message" />
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm fr-label mb-1">Message</label>
-                  <textarea
-                    id="message"
-                    rows={4}
-                    className="fr-input w-full"
-                    placeholder="Votre message"
-                  ></textarea>
+                  <textarea id="message" rows={4} className="fr-input w-full" placeholder="Votre message"></textarea>
                 </div>
                 <div>
-                  <button
-                    type="submit"
-                    className="w-full px-4 py-2 bg-france-navy text-white font-medium rounded-md hover:bg-blue-900 transition-colors"
-                  >
+                  <button type="submit" className="w-full px-4 py-2 bg-france-navy text-white font-medium rounded-md hover:bg-blue-900 transition-colors">
                     Envoyer le message
                   </button>
                 </div>
@@ -375,8 +334,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;

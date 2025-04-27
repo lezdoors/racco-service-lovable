@@ -27,7 +27,8 @@ Simple, rapide et efficace</h1>
       <section id="services" className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">Nos services de raccordement</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">Partenaire N°1
+en France pour toutes demandes de raccordement Enedis</h2>
             <p className="text-france-navy max-w-2xl mx-auto">Confiez votre demande de Raccordement Électrique en France à des experts de confiance Demande de Viabilisation | Raccordement Définitif | Raccordement Provisoire |  Modification de Branchement | Déplacement ou Suppression de Compteur</p>
           </div>
 

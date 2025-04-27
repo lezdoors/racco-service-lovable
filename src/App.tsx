@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +11,10 @@ import MainLayout from "./components/layouts/MainLayout";
 import AdminLayout from "./components/layouts/AdminLayout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
+import { initGTM } from './lib/google-tag-manager';
+import { useEffect } from 'react';
+import "./App.css";
+import ThankYou from './pages/ThankYou';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,27 +25,35 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainLayout />}>
-            <Route index element={<Index />} />
-            <Route path="success" element={<PaymentSuccess />} />
-            <Route path="cancel" element={<PaymentCancel />} />
-          </Route>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="requests" element={<AdminRequests />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+function App() {
+  useEffect(() => {
+    // Initialize Google Tag Manager when the app loads
+    initGTM();
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainLayout />}>
+              <Route index element={<Index />} />
+              <Route path="success" element={<PaymentSuccess />} />
+              <Route path="cancel" element={<PaymentCancel />} />
+              <Route path="thank-you" element={<ThankYou />} />
+            </Route>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="requests" element={<AdminRequests />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default App;

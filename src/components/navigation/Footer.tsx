@@ -49,7 +49,7 @@ const Footer = () => {
         
         <div className="border-t border-enedis-gray-700 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-enedis-gray-400">
-            &copy; {year} Enedis. Tous droits réservés.
+            &copy; {year} Racco-Service. Tous droits réservés.
           </p>
           <div className="mt-4 md:mt-0 flex space-x-4">
             <a href="#" className="text-enedis-gray-400 hover:text-white" aria-label="Facebook">

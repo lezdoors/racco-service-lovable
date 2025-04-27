@@ -9,7 +9,7 @@ export const ContactPreference = () => {
 
   return (
     <div>
-      <Label>Méthode de contact préférée</Label>
+      <Label className="required-field">Méthode de contact préférée</Label>
       <Controller
         name="preferredContact"
         control={control}

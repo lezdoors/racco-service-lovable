@@ -1,13 +1,28 @@
 
 import { useState, useEffect } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 
 // Move the form schema to a separate file for better organization
 export const formSchema = z.object({
-  // Project Information
+  // Personal Information (Step 1 - Essential Information)
+  firstName: z.string().min(2, "Le prénom est requis"),
+  lastName: z.string().min(2, "Le nom est requis"),
+  email: z.string().email("Email invalide"),
+  phone: z.string().min(10, "Numéro de téléphone invalide"),
+  
+  // Additional Personal Information
+  accountType: z.enum(["individual", "professional", "manager"], {
+    required_error: "Veuillez sélectionner un type de compte",
+  }),
+  preferredContact: z.enum(["email", "phone"], {
+    required_error: "Veuillez sélectionner une méthode de contact préférée",
+  }),
+  appointmentDate: z.date().optional(),
+  
+  // Project Information (Step 2)
   projectType: z.string().min(1, "Le type de projet est requis"),
   address: z.string().min(5, "L'adresse est requise"),
   city: z.string().min(2, "La ville est requise"),
@@ -20,25 +35,13 @@ export const formSchema = z.object({
     required_error: "Veuillez sélectionner le type de raccordement",
   }),
   
-  // Technical Details
+  // Technical Details (Step 3)
   meterStatus: z.string().optional(),
   buildingSpecs: z.string().min(5, "Des spécifications détaillées sont requises"),
   connectionDistance: z.number().optional(),
   documents: z.array(z.any()).optional(),
   
-  // Applicant Information
-  name: z.string().min(2, "Votre nom est requis"),
-  email: z.string().email("Email invalide"),
-  phone: z.string().min(10, "Numéro de téléphone invalide"),
-  accountType: z.enum(["individual", "professional", "manager"], {
-    required_error: "Veuillez sélectionner un type de compte",
-  }),
-  preferredContact: z.enum(["email", "phone"], {
-    required_error: "Veuillez sélectionner une méthode de contact préférée",
-  }),
-  appointmentDate: z.date().optional(),
-  
-  // Confirmation
+  // Confirmation (Step 4)
   termsAccepted: z.boolean().refine(val => val === true, {
     message: "Vous devez accepter les conditions générales",
   }),
@@ -46,16 +49,24 @@ export const formSchema = z.object({
 
 export type FormData = z.infer<typeof formSchema>;
 
+// For partial lead submission (Step 1 only)
+export type PartialLeadData = Pick<FormData, 'firstName' | 'lastName' | 'email' | 'phone'>;
+
 const FORM_STORAGE_KEY = 'enedis-form-data';
 
 export const useMultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasSubmittedPartialLead, setHasSubmittedPartialLead] = useState(false);
   const { toast } = useToast();
 
   const methods = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
       projectType: "",
       address: "",
       city: "",
@@ -65,9 +76,6 @@ export const useMultiStepForm = () => {
       buildingSpecs: "",
       connectionDistance: 0,
       documents: [],
-      name: "",
-      email: "",
-      phone: "",
       accountType: "individual",
       preferredContact: "email",
       termsAccepted: false,
@@ -113,11 +121,11 @@ export const useMultiStepForm = () => {
   const getFieldsToValidate = (step: number) => {
     switch (step) {
       case 0:
-        return ["projectType", "address", "city", "postalCode", "completionDate", "capacity", "connectionType"];
+        return ["firstName", "lastName", "email", "phone", "accountType", "preferredContact"];
       case 1:
-        return ["buildingSpecs"];
+        return ["projectType", "address", "city", "postalCode", "completionDate", "capacity", "connectionType"];
       case 2:
-        return ["name", "email", "phone", "accountType", "preferredContact"];
+        return ["buildingSpecs"];
       case 3:
         return ["termsAccepted"];
       default:
@@ -159,6 +167,8 @@ export const useMultiStepForm = () => {
     methods,
     nextStep,
     prevStep,
-    saveFormData
+    saveFormData,
+    hasSubmittedPartialLead,
+    setHasSubmittedPartialLead
   };
 };

@@ -6,26 +6,67 @@ import ApplicantInfoStep from "./steps/ApplicantInfoStep";
 import ConfirmationStep from "./steps/ConfirmationStep";
 import StepIndicator from "./StepIndicator";
 import { useToast } from "@/hooks/use-toast";
-import { submitForm } from "@/services/formSubmission";
+import { submitForm, submitPartialLead } from "@/services/formSubmission";
 import { Button } from "@/components/ui/button";
 import { FormProvider } from "react-hook-form";
+import { useEffect } from "react";
 
 const MultiStepForm = () => {
-  const { currentStep, isLoading, setIsLoading, methods, nextStep, prevStep } = useMultiStepForm();
+  const { currentStep, isLoading, setIsLoading, methods, nextStep, prevStep, hasSubmittedPartialLead, setHasSubmittedPartialLead } = useMultiStepForm();
   const { toast } = useToast();
   
   const steps = [
+    { name: "Informations du demandeur", component: ApplicantInfoStep },
     { name: "Informations du projet", component: ProjectInfoStep },
     { name: "Détails techniques", component: TechnicalDetailsStep },
-    { name: "Informations du demandeur", component: ApplicantInfoStep },
     { name: "Confirmation", component: ConfirmationStep }
   ];
+
+  // Check if user has filled essential information in step 1 that should trigger a partial lead submission
+  const checkAndSubmitPartialLead = async () => {
+    if (currentStep === 0 && !hasSubmittedPartialLead) {
+      const { firstName, lastName, email, phone } = methods.getValues();
+      
+      // Only submit if all essential fields are filled
+      if (firstName && lastName && email && phone) {
+        try {
+          await submitPartialLead({ firstName, lastName, email, phone });
+          setHasSubmittedPartialLead(true);
+          console.log("Partial lead submitted successfully");
+        } catch (error) {
+          console.error("Error submitting partial lead:", error);
+          // Silently fail - don't block the user from proceeding
+        }
+      }
+    }
+  };
+
+  // Track form completion
+  useEffect(() => {
+    // Add Google Tag Manager event tracking for step changes
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({
+        event: 'formStepChange',
+        formStep: currentStep + 1,
+        formStepName: steps[currentStep].name
+      });
+    }
+  }, [currentStep]);
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     try {
       console.log("Form submitted successfully", data);
       const checkoutUrl = await submitForm(data);
+      
+      // Track form completion with Google Tag Manager
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
+          event: 'formSubmission',
+          formCompleted: true
+        });
+      }
+      
       window.location.href = checkoutUrl;
     } catch (error) {
       console.error("Payment error:", error);
@@ -37,6 +78,16 @@ const MultiStepForm = () => {
       });
       setIsLoading(false);
     }
+  };
+
+  const handleNextStep = async () => {
+    // If we're on step 1, check if we should submit a partial lead before proceeding
+    if (currentStep === 0) {
+      await checkAndSubmitPartialLead();
+    }
+    
+    // Then proceed with normal next step logic
+    nextStep();
   };
 
   const CurrentStepComponent = steps[currentStep].component;
@@ -67,7 +118,7 @@ const MultiStepForm = () => {
             {currentStep < steps.length - 1 ? (
               <Button 
                 type="button"
-                onClick={nextStep}
+                onClick={handleNextStep}
                 className="bg-enedis-blue hover:bg-blue-700 text-white"
                 disabled={isLoading}
               >

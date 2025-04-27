@@ -1,6 +1,6 @@
 
 import { Controller, useFormContext } from "react-hook-form";
-import { FormData } from "../MultiStepForm";
+import { FormData } from "@/hooks/useMultiStepForm";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";

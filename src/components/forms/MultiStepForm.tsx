@@ -1,5 +1,5 @@
 
-import { useMultiStepForm } from "@/hooks/useMultiStepForm";
+import { useMultiStepForm, FormData } from "@/hooks/useMultiStepForm";
 import ProjectInfoStep from "./steps/ProjectInfoStep";
 import TechnicalDetailsStep from "./steps/TechnicalDetailsStep";
 import ApplicantInfoStep from "./steps/ApplicantInfoStep";
@@ -8,6 +8,7 @@ import StepIndicator from "./StepIndicator";
 import { useToast } from "@/hooks/use-toast";
 import { submitForm } from "@/services/formSubmission";
 import { Button } from "@/components/ui/button";
+import { FormProvider } from "react-hook-form";
 
 const MultiStepForm = () => {
   const { currentStep, isLoading, setIsLoading, methods, nextStep, prevStep } = useMultiStepForm();

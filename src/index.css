@@ -1,11 +1,10 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 40 30% 97%; /* F8F4E9 - cream background */
+    --background: 60 30% 99%; /* #F9F9F9 - off-white background */
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -14,12 +13,12 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Adjust primary to match French navy */
-    --primary: 225 100% 13%; /* #000F44 */
+    /* Adjust primary to match lighter blue */
+    --primary: 217 100% 65%; /* #4C9AFF */
     --primary-foreground: 0 0% 100%;
 
-    /* Adjust secondary to match French red */
-    --secondary: 356 93% 46%; /* #E30613 */
+    /* Adjust secondary to match coral */
+    --secondary: 9 100% 75%; /* #FF8C7E */
     --secondary-foreground: 0 0% 100%;
 
     --muted: 210 40% 96.1%;
@@ -33,30 +32,30 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 225 100% 13%; /* #000F44 */
+    --ring: 217 100% 65%; /* #4C9AFF */
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 225 100% 13%; /* #000F44 */
-    --sidebar-foreground: 40 30% 97%; /* #F8F4E9 */
-    --sidebar-primary: 356 93% 46%; /* #E30613 */
+    --sidebar-background: 217 100% 65%; /* #4C9AFF */
+    --sidebar-foreground: 0 0% 100%; /* #FFFFFF */
+    --sidebar-primary: 9 100% 75%; /* #FF8C7E */
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 43 74% 52%; /* #D4AF37 */
+    --sidebar-accent: 49 84% 81%; /* #F7E9A5 */
     --sidebar-accent-foreground: 225 100% 13%;
-    --sidebar-border: 43 74% 52%;
+    --sidebar-border: 49 84% 81%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 225 100% 13%; /* #000F44 */
-    --foreground: 40 30% 97%; /* #F8F4E9 */
+    --background: 217 100% 65%; /* #4C9AFF */
+    --foreground: 0 0% 100%; /* #FFFFFF */
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 43 74% 52%; /* #D4AF37 */
+    --primary: 49 84% 81%; /* #F7E9A5 */
     --primary-foreground: 225 100% 13%; /* #000F44 */
-    --secondary: 356 93% 46%; /* #E30613 */
+    --secondary: 9 100% 75%; /* #FF8C7E */
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
@@ -66,14 +65,14 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 43 74% 52%; /* #D4AF37 */
-    --sidebar-background: 40 30% 97%; /* #F8F4E9 */
-    --sidebar-foreground: 225 100% 13%; /* #000F44 */
-    --sidebar-primary: 356 93% 46%; /* #E30613 */
+    --ring: 49 84% 81%; /* #F7E9A5 */
+    --sidebar-background: 60 30% 99%; /* #F9F9F9 */
+    --sidebar-foreground: 217 100% 65%; /* #4C9AFF */
+    --sidebar-primary: 9 100% 75%; /* #FF8C7E */
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 43 74% 52%; /* #D4AF37 */
+    --sidebar-accent: 49 84% 81%; /* #F7E9A5 */
     --sidebar-accent-foreground: 225 100% 13%;
-    --sidebar-border: 43 74% 52%;
+    --sidebar-border: 49 84% 81%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
@@ -91,7 +90,7 @@
     @apply font-playfair;
   }
 
-  /* French-inspired decorative elements */
+  /* French-inspired decorative elements - updated with lighter feel */
   .french-divider {
     @apply relative my-8 h-px bg-gradient-to-r from-transparent via-france-gold to-transparent;
   }
@@ -149,52 +148,52 @@
 
 /* French UI Elements */
 .fr-card {
-  @apply bg-white rounded-md border border-gray-200 shadow-sm p-6 relative overflow-hidden;
-  background-image: linear-gradient(to bottom right, rgba(248, 244, 233, 0.5), rgba(255, 255, 255, 1));
+  @apply bg-white rounded-lg border border-gray-100 shadow-sm p-6 relative overflow-hidden;
+  background-image: linear-gradient(to bottom right, rgba(249, 249, 249, 0.8), rgba(255, 255, 255, 1));
 }
 
 .fr-card::before {
   @apply content-[''] absolute top-0 left-0 w-full h-1;
-  background: linear-gradient(to right, #000F44, #E30613, #D4AF37);
+  background: linear-gradient(to right, #4C9AFF, #FF8C7E, #F7E9A5);
 }
 
-/* Tooltip styling for French terms */
+/* Tooltip styling for French terms - updated */
 .fr-tooltip {
   @apply relative inline-block cursor-help border-b border-dotted border-gray-400;
 }
 
 .fr-tooltip .fr-tooltip-text {
-  @apply invisible absolute z-10 w-60 bg-france-navy text-white text-sm px-3 py-2 rounded-md bottom-full left-1/2 transform -translate-x-1/2 -translate-y-2 opacity-0 transition-opacity duration-300;
+  @apply invisible absolute z-10 w-60 bg-france-blue text-white text-sm px-3 py-2 rounded-md bottom-full left-1/2 transform -translate-x-1/2 -translate-y-2 opacity-0 transition-opacity duration-300;
 }
 
 .fr-tooltip:hover .fr-tooltip-text {
   @apply visible opacity-100;
 }
 
-/* French form styles */
+/* French form styles - updated with lighter look */
 .fr-input {
-  @apply border-b border-france-navy bg-transparent focus:border-france-gold focus:ring-0 px-2 py-1;
+  @apply border-b border-france-blue bg-transparent focus:border-france-gold focus:ring-0 px-2 py-1;
 }
 
 .fr-label {
-  @apply text-sm font-medium text-france-navy;
+  @apply text-sm font-medium text-france-blue;
 }
 
 .fr-button-primary {
-  @apply bg-france-navy text-white hover:bg-blue-900 focus:ring-2 focus:ring-france-gold;
+  @apply bg-france-blue text-white hover:bg-blue-400 focus:ring-2 focus:ring-france-gold;
 }
 
 .fr-button-secondary {
-  @apply bg-france-cream text-france-navy border border-france-navy hover:bg-gray-100;
+  @apply bg-france-offWhite text-france-blue border border-france-blue hover:bg-gray-100;
 }
 
 .fr-button-accent {
-  @apply bg-france-red text-white hover:bg-red-700;
+  @apply bg-france-coral text-white hover:bg-red-300;
 }
 
 /* French-inspired pattern backgrounds */
 .bg-pattern-light {
-  background-color: rgba(248, 244, 233, 0.5);
+  background-color: rgba(249, 249, 249, 0.8);
   background-image: url('/patterns/french-pattern.svg');
   background-size: 100px 100px;
 }

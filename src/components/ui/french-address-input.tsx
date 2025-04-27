@@ -65,7 +65,7 @@ export function FrenchAddressInput({
             placeholder="Code postal"
             className={`fr-input mt-1 ${
               address.postalCode && !validatePostalCode(address.postalCode)
-                ? 'border-france-red'
+                ? 'border-france-coral'
                 : ''
             }`}
             value={address.postalCode}
@@ -74,7 +74,7 @@ export function FrenchAddressInput({
             pattern="^(0[1-9]|[1-8]\d|9[0-8])\d{3}$"
           />
           {address.postalCode && !validatePostalCode(address.postalCode) && (
-            <p className="text-france-red text-xs mt-1">
+            <p className="text-france-coral text-xs mt-1">
               Format invalide. Exemple: 75001
             </p>
           )}

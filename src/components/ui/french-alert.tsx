@@ -20,31 +20,31 @@ export function FrenchAlert({
 }: FrenchAlertProps) {
   const variantStyles = {
     info: {
-      containerClass: "border-france-navy bg-france-blueLight text-france-navy",
+      containerClass: "border-france-blue bg-france-blueLight text-france-blue",
       iconComponent: Info,
-      iconClass: "text-france-navy",
+      iconClass: "text-france-blue",
     },
     warning: {
-      containerClass: "border-orange-500 bg-orange-50 text-orange-800",
+      containerClass: "border-amber-400 bg-amber-50 text-amber-700",
       iconComponent: AlertTriangle,
-      iconClass: "text-orange-500",
+      iconClass: "text-amber-400",
     },
     success: {
-      containerClass: "border-green-500 bg-green-50 text-green-800",
+      containerClass: "border-emerald-400 bg-emerald-50 text-emerald-700",
       iconComponent: Check,
-      iconClass: "text-green-500",
+      iconClass: "text-emerald-400",
     },
     error: {
-      containerClass: "border-france-red bg-france-redLight text-france-red",
+      containerClass: "border-france-coral bg-france-redLight text-france-coral",
       iconComponent: AlertTriangle,
-      iconClass: "text-france-red",
+      iconClass: "text-france-coral",
     },
   };
 
   const { containerClass, iconComponent: IconComponent, iconClass } = variantStyles[variant];
 
   return (
-    <Alert className={cn("relative", containerClass, className)}>
+    <Alert className={cn("relative rounded-lg shadow-sm", containerClass, className)}>
       <IconComponent className={cn("h-5 w-5", iconClass)} />
       <AlertTitle className="font-playfair font-semibold text-inherit">{title}</AlertTitle>
       <AlertDescription className="text-inherit">{description}</AlertDescription>

@@ -72,10 +72,10 @@ export function FrenchDatePicker({
             className={cn(
               "w-full justify-start text-left font-normal",
               !date && "text-muted-foreground",
-              "fr-input"
+              "fr-input border border-gray-200 hover:bg-gray-50"
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon className="mr-2 h-4 w-4 text-france-blue" />
             {date ? (
               format(date, "dd/MM/yyyy", { locale: fr })
             ) : (
@@ -83,7 +83,7 @@ export function FrenchDatePicker({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0 bg-white shadow-lg rounded-lg border border-gray-100" align="start">
           <Calendar
             mode="single"
             selected={date}
@@ -95,6 +95,7 @@ export function FrenchDatePicker({
             locale={fr}
             weekStartsOn={1} // French calendars start on Monday
             initialFocus
+            className="p-3 pointer-events-auto"
           />
         </PopoverContent>
       </Popover>

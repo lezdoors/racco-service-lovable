@@ -86,12 +86,19 @@ export default {
 						900: '#171717',
 					}
 				},
-				// French-themed color palette
+				// Updated French-themed color palette
 				france: {
 					navy: '#000F44',
 					red: '#E30613',
 					cream: '#F8F4E9',
-					gold: '#D4AF37',
+					gold: '#F7E9A5',
+					blue: '#4C9AFF',
+					coral: '#FF8C7E',
+					white: '#FFFFFF',
+					offWhite: '#F9F9F9',
+					mint: '#D7F9EF',
+					sage: '#E5F2C9',
+					peach: '#FFF1E3',
 					blueLight: '#D5E0FC',
 					blueMedium: '#5A73FC',
 					redLight: '#FFE5E8',

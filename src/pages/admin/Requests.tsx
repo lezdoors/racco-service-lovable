@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Card, 
@@ -26,6 +25,7 @@ import {
 import { FileText, Filter, Search, User, Mail, Phone, MapPin, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
+import { Label } from "@/components/ui/label";
 
 // Mock data for traiteurs (would come from API/database)
 const traiteurs = [
@@ -35,7 +35,23 @@ const traiteurs = [
   { id: 4, name: "Thomas Petit", available: true },
 ];
 
-const requests = [
+interface Request {
+  id: string;
+  client: string;
+  email: string;
+  phone: string;
+  projectType: string;
+  date: string;
+  address: string;
+  status: string;
+  statusColor: string;
+  priority: string;
+  leadStatus: "Partiel" | "Complet";
+  assignedTo: { id: number; name: string } | null;
+}
+
+// Making sure the mock data adheres to the Request interface type
+const requests: Request[] = [
   {
     id: "REC-2023-4526",
     client: "Martin Dupont",
@@ -150,21 +166,6 @@ const requests = [
   },
 ];
 
-interface Request {
-  id: string;
-  client: string;
-  email: string;
-  phone: string;
-  projectType: string;
-  date: string;
-  address: string;
-  status: string;
-  statusColor: string;
-  priority: string;
-  leadStatus: "Partiel" | "Complet";
-  assignedTo: { id: number; name: string } | null;
-}
-
 const Requests = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -179,7 +180,7 @@ const Requests = () => {
   const { user } = useAuth();
   
   const isAdmin = user?.role === 'admin';
-  
+
   const filteredRequests = requestsData.filter(request => {
     const matchesSearch = 
       request.client.toLowerCase().includes(searchTerm.toLowerCase()) ||

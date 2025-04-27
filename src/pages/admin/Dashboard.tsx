@@ -1,20 +1,22 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, CalendarCheck, Clock, FileText, ListChecks, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Dashboard = () => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold">Tableau de bord</h1>
-        <div className="flex space-x-2 mt-4 sm:mt-0">
-          <Button variant="outline" size="sm">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-xl md:text-2xl font-bold">Tableau de bord</h1>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" className="w-full sm:w-auto">
             <Clock className="mr-1 h-4 w-4" />
             Cette semaine
           </Button>
-          <Button className="bg-enedis-blue hover:bg-blue-700 text-white" size="sm">
+          <Button className="bg-enedis-blue hover:bg-blue-700 text-white w-full sm:w-auto" size="sm">
             Exporter
           </Button>
         </div>

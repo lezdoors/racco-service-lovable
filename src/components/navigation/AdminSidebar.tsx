@@ -10,7 +10,10 @@ import {
   Settings,
   User,
   Users,
+  X,
 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useEffect } from "react";
 
 interface AdminSidebarProps {
   isOpen: boolean;
@@ -26,6 +29,14 @@ type NavItem = {
 const AdminSidebar = ({ isOpen, setIsOpen }: AdminSidebarProps) => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const isMobile = useIsMobile();
+
+  // Close sidebar when navigating on mobile
+  useEffect(() => {
+    if (isMobile && isOpen) {
+      setIsOpen(false);
+    }
+  }, [location, isMobile, isOpen, setIsOpen]);
 
   const navItems: NavItem[] = [
     {
@@ -79,7 +90,7 @@ const AdminSidebar = ({ isOpen, setIsOpen }: AdminSidebarProps) => {
         }
       )}
     >
-      <div className="p-4 border-b flex items-center">
+      <div className="p-4 border-b flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
           <img
             src="/logo-enedis.svg"
@@ -91,9 +102,18 @@ const AdminSidebar = ({ isOpen, setIsOpen }: AdminSidebarProps) => {
           />
           <span className="font-semibold text-enedis-gray-800">Admin</span>
         </Link>
+        {isMobile && (
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="lg:hidden text-gray-500 hover:text-gray-700"
+            aria-label="Fermer le menu"
+          >
+            <X size={20} />
+          </button>
+        )}
       </div>
 
-      <nav className="p-2">
+      <nav className="p-2 overflow-y-auto max-h-[calc(100vh-4rem)]">
         <ul className="space-y-1">
           {navItems.map((item) => (
             <li key={item.href}>
@@ -105,6 +125,7 @@ const AdminSidebar = ({ isOpen, setIsOpen }: AdminSidebarProps) => {
                     ? "bg-enedis-blue text-white"
                     : "text-enedis-gray-700 hover:bg-enedis-lightBlue hover:text-enedis-blue"
                 )}
+                onClick={() => isMobile && setIsOpen(false)}
               >
                 {item.icon}
                 <span>{item.label}</span>

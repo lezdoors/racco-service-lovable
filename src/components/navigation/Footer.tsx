@@ -1,11 +1,7 @@
-
 import { Link } from "react-router-dom";
-
 const Footer = () => {
   const year = new Date().getFullYear();
-
-  return (
-    <footer className="bg-enedis-gray-800 text-white py-10">
+  return <footer className="bg-enedis-gray-800 text-white py-10">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
@@ -19,10 +15,10 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-3">Liens Rapides</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/" className="text-enedis-gray-300 hover:text-white">Accueil</Link></li>
+              
               <li><Link to="/#services" className="text-enedis-gray-300 hover:text-white">Nos Services</Link></li>
               <li><Link to="/#about" className="text-enedis-gray-300 hover:text-white">À propos</Link></li>
-              <li><Link to="/#contact" className="text-enedis-gray-300 hover:text-white">Contact</Link></li>
+              
             </ul>
           </div>
           
@@ -32,7 +28,7 @@ const Footer = () => {
               <li><a href="#" className="text-enedis-gray-300 hover:text-white">Centre d'aide</a></li>
               <li><a href="#" className="text-enedis-gray-300 hover:text-white">FAQ</a></li>
               <li><a href="#" className="text-enedis-gray-300 hover:text-white">Nous contacter</a></li>
-              <li><a href="#" className="text-enedis-gray-300 hover:text-white">Urgence</a></li>
+              
             </ul>
           </div>
           
@@ -70,8 +66,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;

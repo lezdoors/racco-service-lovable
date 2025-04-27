@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Eye, EyeOff, Lock, User } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Lock, User } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const loginSchema = z.object({
   username: z.string().min(1, "Le nom d'utilisateur est requis"),
@@ -25,6 +26,8 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [loginAttempts, setLoginAttempts] = useState(0);
   
   const from = (location.state as any)?.from || "/admin";
   
@@ -37,26 +40,38 @@ const AdminLogin = () => {
   });
   
   const onSubmit = async (data: LoginFormValues) => {
+    setLoginError(null);
+    
     try {
       await login(data.username, data.password);
-      toast({
-        title: "Connexion réussie",
-        description: "Vous êtes maintenant connecté à votre espace administrateur.",
-      });
       navigate(from, { replace: true });
     } catch (error) {
-      toast({
-        title: "Erreur de connexion",
-        description: error instanceof Error ? error.message : "Une erreur est survenue",
-        variant: "destructive",
-      });
+      setLoginAttempts(prev => prev + 1);
+      
+      const errorMessage = error instanceof Error ? error.message : "Une erreur est survenue";
+      setLoginError(errorMessage);
+      
+      // If too many failed attempts, show a different message
+      if (loginAttempts >= 2) {
+        toast({
+          title: "Trop de tentatives échouées",
+          description: "Veuillez réessayer dans quelques instants ou contactez l'administrateur.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Erreur de connexion",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      }
     }
   };
   
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md px-4">
-        <Card>
+        <Card className="border-gray-200 shadow-lg">
           <CardHeader className="space-y-1">
             <div className="flex justify-center mb-4">
               <img 
@@ -74,6 +89,15 @@ const AdminLogin = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {loginError && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  {loginError}
+                </AlertDescription>
+              </Alert>
+            )}
+            
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="username">Nom d'utilisateur</Label>
@@ -86,6 +110,7 @@ const AdminLogin = () => {
                     placeholder="admin"
                     className="pl-10"
                     {...register("username")}
+                    autoComplete="username"
                   />
                 </div>
                 {errors.username && (
@@ -103,6 +128,7 @@ const AdminLogin = () => {
                     type={showPassword ? "text" : "password"}
                     className="pl-10"
                     {...register("password")}
+                    autoComplete="current-password"
                   />
                   <Button
                     type="button"
@@ -116,6 +142,9 @@ const AdminLogin = () => {
                     ) : (
                       <Eye className="h-4 w-4 text-gray-400" />
                     )}
+                    <span className="sr-only">
+                      {showPassword ? "Cacher le mot de passe" : "Afficher le mot de passe"}
+                    </span>
                   </Button>
                 </div>
                 {errors.password && (
@@ -124,14 +153,14 @@ const AdminLogin = () => {
               </div>
               <Button 
                 type="submit" 
-                className="w-full bg-enedis-blue" 
+                className="w-full bg-enedis-blue hover:bg-blue-700 transition-colors" 
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Connexion en cours..." : "Se connecter"}
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="flex justify-center">
+          <CardFooter className="flex justify-center pt-0">
             <p className="text-sm text-gray-500">
               Accès réservé aux administrateurs et traiteurs
             </p>

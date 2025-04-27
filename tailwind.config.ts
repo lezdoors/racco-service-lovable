@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,24 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Enedis brand colors
+				enedis: {
+					blue: '#0063AF',
+					green: '#94C11F',
+					lightBlue: '#e6f0f9',
+					lightGreen: '#f5f9e6',
+					gray: {
+						100: '#F7F7F7',
+						200: '#E5E5E5',
+						300: '#D4D4D4',
+						400: '#A3A3A3',
+						500: '#737373',
+						600: '#525252',
+						700: '#404040',
+						800: '#262626',
+						900: '#171717',
+					}
 				}
 			},
 			borderRadius: {
@@ -84,11 +103,26 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+				fadeIn: {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
+				slideUp: {
+					'0%': { transform: 'translateY(20px)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' }
+				},
+				slideDown: {
+					'0%': { transform: 'translateY(-20px)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' }
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				fadeIn: 'fadeIn 0.5s ease-out forwards',
+				slideUp: 'slideUp 0.5s ease-out forwards',
+				slideDown: 'slideDown 0.5s ease-out forwards',
 			}
 		}
 	},

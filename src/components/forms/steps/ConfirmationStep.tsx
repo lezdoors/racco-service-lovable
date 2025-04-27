@@ -98,7 +98,7 @@ const ConfirmationStep = () => {
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
           <div>
             <dt className="text-sm font-medium text-gray-500">Nom</dt>
-            <dd className="mt-1 text-sm">{formData.name}</dd>
+            <dd className="mt-1 text-sm">{formData.firstName} {formData.lastName}</dd>
           </div>
           <div>
             <dt className="text-sm font-medium text-gray-500">Type de compte</dt>

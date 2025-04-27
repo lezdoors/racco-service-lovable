@@ -10,9 +10,11 @@ Pour déployer cette application sur 10web, vous devez configurer les variables 
 - `STRIPE_SECRET_KEY` : Votre clé secrète Stripe (à configurer dans les fonctions edge)
 
 ### Variables d'environnement Supabase
-- `SUPABASE_URL` : L'URL de votre projet Supabase
-- `SUPABASE_ANON_KEY` : La clé anonyme de votre projet Supabase
-- `SUPABASE_SERVICE_ROLE_KEY` : La clé de service de votre projet Supabase
+- `VITE_SUPABASE_URL` : L'URL de votre projet Supabase
+- `VITE_SUPABASE_ANON_KEY` : La clé anonyme de votre projet Supabase
+- `VITE_SUPABASE_SERVICE_ROLE_KEY` : La clé de service de votre projet Supabase
+
+> ⚠️ **IMPORTANT** : Ces variables d'environnement sont **obligatoires** pour le bon fonctionnement de l'application. Sans elles, les fonctionnalités de paiement et de soumission de formulaire ne fonctionneront pas.
 
 ## Instructions de déploiement
 
@@ -20,6 +22,14 @@ Pour déployer cette application sur 10web, vous devez configurer les variables 
 2. Ajoutez chaque variable d'environnement listée ci-dessus
 3. Assurez-vous que tous les fichiers ont les bonnes permissions (644 pour les fichiers, 755 pour les dossiers)
 4. Déployez l'application
+
+## Vérification des variables d'environnement
+
+Avant de déployer en production, vérifiez que les variables d'environnement sont correctement configurées :
+
+1. Vérifiez que `VITE_SUPABASE_URL` est au format `https://votre-projet.supabase.co`
+2. Vérifiez que `VITE_SUPABASE_ANON_KEY` est une clé valide commençant par `eyJ...`
+3. Vérifiez que `VITE_STRIPE_PUBLISHABLE_KEY` est au format `pk_test_` ou `pk_live_`
 
 ## Vérification post-déploiement
 

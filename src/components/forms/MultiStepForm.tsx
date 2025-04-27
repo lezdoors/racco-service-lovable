@@ -54,10 +54,14 @@ const formSchema = z.object({
 
 export type FormData = z.infer<typeof formSchema>;
 
-// Initialize Supabase client
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Initialize Supabase client - safely handle missing environment variables
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+// Create a dummy client if env variables are not set
+const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 const FORM_STORAGE_KEY = 'enedis-form-data';
 
@@ -200,6 +204,11 @@ const MultiStepForm = () => {
       
       console.log("Form submitted successfully", data);
       
+      // Check if Supabase client is properly initialized
+      if (!supabase) {
+        throw new Error("Supabase client not initialized. Please configure the environment variables.");
+      }
+      
       // Create checkout session with Stripe
       const { data: sessionData, error } = await supabase.functions.invoke('create-checkout', {
         body: { formData: data }
@@ -214,9 +223,13 @@ const MultiStepForm = () => {
       
     } catch (error) {
       console.error("Payment error:", error);
+      
+      // Show more detailed error message
+      const errorMessage = error instanceof Error ? error.message : "Erreur inconnue";
+      
       toast({
         title: "Erreur de paiement",
-        description: "Une erreur s'est produite lors de la création de votre session de paiement. Veuillez réessayer.",
+        description: `Une erreur s'est produite: ${errorMessage}. Veuillez vérifier la configuration ou réessayer.`,
         variant: "destructive",
       });
       setIsLoading(false);

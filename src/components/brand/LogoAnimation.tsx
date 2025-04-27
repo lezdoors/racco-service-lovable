@@ -12,16 +12,27 @@ const LogoAnimation = ({
   className = '',
   animate = true
 }: LogoAnimationProps) => {
-  const svgRef = useRef<SVGSVGElement>(null);
+  const objectRef = useRef<HTMLObjectElement>(null);
 
   useEffect(() => {
-    if (!animate || !svgRef.current) return;
+    if (!animate || !objectRef.current) return;
 
-    // Add animation class to the flowing line
-    const flowLine = svgRef.current.querySelector('path[stroke*="url(#flow-gradient)"]');
-    if (flowLine) {
-      flowLine.classList.add('animate-pulse');
-    }
+    // We need to wait for the SVG to load in the object element
+    objectRef.current.onload = () => {
+      try {
+        // Access the SVG document inside the object
+        const svgDoc = objectRef.current?.contentDocument;
+        if (!svgDoc) return;
+
+        // Find and animate the flowing line path inside the SVG document
+        const flowLine = svgDoc.querySelector('path[stroke*="url(#flow-gradient)"]');
+        if (flowLine) {
+          flowLine.classList.add('animate-pulse');
+        }
+      } catch (error) {
+        console.error("Error accessing SVG content:", error);
+      }
+    };
   }, [animate]);
 
   const logoPath = `/brand/connect-enedis-${
@@ -33,7 +44,7 @@ const LogoAnimation = ({
 
   return (
     <object
-      ref={svgRef}
+      ref={objectRef}
       data={logoPath}
       type="image/svg+xml"
       className={`w-auto h-full ${className}`}

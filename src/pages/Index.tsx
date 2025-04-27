@@ -28,10 +28,7 @@ Simple, rapide et efficace</h1>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">Nos services de raccordement</h2>
-            <p className="text-france-navy max-w-2xl mx-auto">
-              Enedis vous accompagne dans toutes vos démarches de raccordement électrique, 
-              que ce soit pour une nouvelle construction, une rénovation ou une augmentation de puissance.
-            </p>
+            <p className="text-france-navy max-w-2xl mx-auto">Confiez votre demande de Raccordement Électrique en France à des experts de confiance Demande de Viabilisation | Raccordement Définitif | Raccordement Provisoire |  Modification de Branchement | Déplacement ou Suppression de Compteur</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

@@ -9,11 +9,13 @@ import { useToast } from "@/hooks/use-toast";
 import { submitForm, submitPartialLead } from "@/services/formSubmission";
 import { Button } from "@/components/ui/button";
 import { FormProvider } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { trackFormStep, trackFormSubmission } from "@/lib/google-tag-manager";
 
 const MultiStepForm = () => {
   const { currentStep, isLoading, setIsLoading, methods, nextStep, prevStep, hasSubmittedPartialLead, setHasSubmittedPartialLead } = useMultiStepForm();
   const { toast } = useToast();
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
   
   const steps = [
     { name: "Informations du demandeur", component: ApplicantInfoStep },
@@ -30,43 +32,45 @@ const MultiStepForm = () => {
       // Only submit if all essential fields are filled
       if (firstName && lastName && email && phone) {
         try {
+          setIsLoading(true);
           await submitPartialLead({ firstName, lastName, email, phone });
           setHasSubmittedPartialLead(true);
           console.log("Partial lead submitted successfully");
+          
+          // Track partial lead submission with Google Tag Manager
+          if (typeof window !== 'undefined' && window.dataLayer) {
+            window.dataLayer.push({
+              event: 'partialLeadSubmission',
+              formPartiallyCompleted: true
+            });
+          }
         } catch (error) {
           console.error("Error submitting partial lead:", error);
           // Silently fail - don't block the user from proceeding
+        } finally {
+          setIsLoading(false);
         }
       }
     }
   };
 
-  // Track form completion
+  // Track form step changes
   useEffect(() => {
-    // Add Google Tag Manager event tracking for step changes
-    if (typeof window !== 'undefined' && window.dataLayer) {
-      window.dataLayer.push({
-        event: 'formStepChange',
-        formStep: currentStep + 1,
-        formStepName: steps[currentStep].name
-      });
-    }
+    // Track form step changes
+    trackFormStep(currentStep + 1, steps[currentStep].name);
   }, [currentStep]);
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
+    setAttemptedSubmit(true);
     try {
       console.log("Form submitted successfully", data);
       const checkoutUrl = await submitForm(data);
       
-      // Track form completion with Google Tag Manager
-      if (typeof window !== 'undefined' && window.dataLayer) {
-        window.dataLayer.push({
-          event: 'formSubmission',
-          formCompleted: true
-        });
-      }
+      // Track form completion
+      trackFormSubmission(true);
       
+      // Redirect to payment page or thank you page
       window.location.href = checkoutUrl;
     } catch (error) {
       console.error("Payment error:", error);
@@ -76,6 +80,15 @@ const MultiStepForm = () => {
         description: `Une erreur s'est produite: ${errorMessage}. Veuillez vérifier la configuration ou réessayer.`,
         variant: "destructive",
       });
+      
+      // Track form submission error
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
+          event: 'formSubmissionError',
+          formError: errorMessage
+        });
+      }
+      
       setIsLoading(false);
     }
   };
@@ -122,7 +135,7 @@ const MultiStepForm = () => {
                 className="bg-enedis-blue hover:bg-blue-700 text-white"
                 disabled={isLoading}
               >
-                Suivant
+                {isLoading ? "Chargement..." : "Suivant"}
               </Button>
             ) : (
               <Button 
@@ -135,7 +148,7 @@ const MultiStepForm = () => {
             )}
           </div>
           
-          {Object.keys(methods.formState.errors).length > 0 && (
+          {Object.keys(methods.formState.errors).length > 0 && attemptedSubmit && (
             <div className="mt-4 p-3 bg-red-50 text-red-600 rounded-md text-sm">
               <p>Le formulaire contient des erreurs. Veuillez vérifier les champs marqués.</p>
             </div>

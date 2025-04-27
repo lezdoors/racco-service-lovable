@@ -22,6 +22,9 @@ export const submitForm = async (data: FormData) => {
     // Then, send email notification for complete submission
     await sendEmailNotification(data, "complete");
     
+    // Track completion in CRM
+    await updateCrmRecord(data);
+    
     // Finally, process payment/checkout
     const { data: sessionData, error } = await supabase.functions.invoke('create-checkout', {
       body: { formData: data }
@@ -47,10 +50,84 @@ export const submitPartialLead = async (data: PartialLeadData) => {
     // Send email notification for partial lead
     await sendEmailNotification(data, "partial");
     
+    // Add to CRM as partial lead
+    await addPartialLeadToCrm(data);
+    
     return true;
   } catch (error) {
     console.error("Error submitting partial lead:", error);
     throw error;
+  }
+};
+
+// Helper function to add a new partial lead to CRM
+const addPartialLeadToCrm = async (data: PartialLeadData) => {
+  try {
+    const zapierCrmWebhookUrl = import.meta.env.VITE_ZAPIER_CRM_WEBHOOK;
+    
+    if (!zapierCrmWebhookUrl) {
+      console.warn("Zapier webhook URL not configured for CRM integration");
+      return;
+    }
+    
+    const response = await fetch(zapierCrmWebhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        ...data,
+        status: "Partiel",
+        source: "Website Form",
+        timestamp: new Date().toISOString()
+      }),
+      mode: "no-cors"
+    });
+    
+    return response;
+  } catch (error) {
+    console.error("Error adding partial lead to CRM:", error);
+    // Don't block the form submission if CRM integration fails
+  }
+};
+
+// Update existing CRM record with complete information
+const updateCrmRecord = async (data: FormData) => {
+  try {
+    const zapierCrmUpdateWebhookUrl = import.meta.env.VITE_ZAPIER_CRM_UPDATE_WEBHOOK;
+    
+    if (!zapierCrmUpdateWebhookUrl) {
+      console.warn("Zapier webhook URL not configured for CRM update");
+      return;
+    }
+    
+    const response = await fetch(zapierCrmUpdateWebhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: data.email, // Used as key to match existing record
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone,
+        address: data.address,
+        city: data.city,
+        postalCode: data.postalCode,
+        projectType: data.projectType,
+        connectionType: data.connectionType,
+        capacity: data.capacity,
+        status: "Complet",
+        source: "Website Form",
+        timestamp: new Date().toISOString()
+      }),
+      mode: "no-cors"
+    });
+    
+    return response;
+  } catch (error) {
+    console.error("Error updating CRM record:", error);
+    // Don't block the form submission if CRM integration fails
   }
 };
 
@@ -111,6 +188,8 @@ const updateGoogleSheet = async (data: FormData) => {
         postalCode: data.postalCode,
         projectType: data.projectType,
         connectionType: data.connectionType,
+        capacity: data.capacity,
+        completionDate: data.completionDate ? data.completionDate.toISOString() : null,
         status: "Complet",
         timestamp: new Date().toISOString()
       }),
@@ -157,7 +236,8 @@ const sendEmailNotification = async (data: PartialLeadData | FormData, type: "pa
         city: data.city,
         postalCode: data.postalCode,
         projectType: data.projectType,
-        connectionType: data.connectionType
+        connectionType: data.connectionType,
+        capacity: data.capacity
       });
     }
     

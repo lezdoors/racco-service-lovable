@@ -1,3 +1,4 @@
+
 import { Bell, Menu, Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,12 +11,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 import LogoAnimation from "../brand/LogoAnimation";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AdminHeaderProps {
   toggleSidebar: () => void;
 }
 
 const AdminHeader = ({ toggleSidebar }: AdminHeaderProps) => {
+  const { user, logout } = useAuth();
+  
   return (
     <header className="bg-white border-b px-4 py-3 flex items-center justify-between">
       <div className="flex items-center">
@@ -56,9 +60,9 @@ const AdminHeader = ({ toggleSidebar }: AdminHeaderProps) => {
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Admin</p>
+                <p className="text-sm font-medium leading-none">{user?.username || "Admin"}</p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  admin@enedis.fr
+                  {user?.role === 'admin' ? 'Administrateur' : 'Traiteur'}
                 </p>
               </div>
             </DropdownMenuLabel>
@@ -66,8 +70,8 @@ const AdminHeader = ({ toggleSidebar }: AdminHeaderProps) => {
             <DropdownMenuItem>Profil</DropdownMenuItem>
             <DropdownMenuItem>Paramètres</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link to="/" className="w-full">Déconnexion</Link>
+            <DropdownMenuItem onClick={logout}>
+              Déconnexion
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

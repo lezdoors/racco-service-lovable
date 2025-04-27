@@ -51,7 +51,25 @@ export const trackFormSubmission = (success: boolean) => {
     window.dataLayer.push({
       event: 'formSubmission',
       formCompleted: true,
-      formSuccess: success
+      formSuccess: success,
+      conversionValue: 1,  // For Google Ads tracking
+      transaction_id: `LEAD-${Date.now()}` // Generate a unique ID for each submission
+    });
+  }
+};
+
+// Add dataLayer event for payment completion
+export const trackPaymentCompletion = (transactionId: string, amount: number) => {
+  if (typeof window !== 'undefined' && window.dataLayer) {
+    window.dataLayer.push({
+      event: 'paymentComplete',
+      ecommerce: {
+        purchase: {
+          transaction_id: transactionId,
+          value: amount,
+          currency: 'EUR'
+        }
+      }
     });
   }
 };

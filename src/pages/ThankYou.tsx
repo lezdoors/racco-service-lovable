@@ -1,18 +1,34 @@
 
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { trackFormSubmission } from '@/lib/google-tag-manager';
-import { CheckCircle } from 'lucide-react';
+import { trackFormSubmission, trackPaymentCompletion } from '@/lib/google-tag-manager';
+import { CheckCircle, Download, Calendar } from 'lucide-react';
 
 const ThankYou = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const transactionId = queryParams.get('transaction_id') || `T-${Date.now()}`;
+  const amount = parseFloat(queryParams.get('amount') || '99');
+
   useEffect(() => {
-    // Track successful form submission
+    // Track successful form submission and payment completion
     trackFormSubmission(true);
+    trackPaymentCompletion(transactionId, amount);
+    
+    // Google Ads Conversion Tracking - Event Snippet
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'conversion', {
+        'send_to': import.meta.env.VITE_GOOGLE_ADS_CONVERSION_ID,
+        'value': amount,
+        'currency': 'EUR',
+        'transaction_id': transactionId
+      });
+    }
     
     // Scroll to top
     window.scrollTo(0, 0);
-  }, []);
+  }, [transactionId, amount]);
 
   return (
     <div className="container mx-auto py-12 px-4 max-w-3xl">
@@ -39,6 +55,22 @@ const ThankYou = () => {
           </ol>
         </div>
         
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          <div className="border border-enedis-blue/20 rounded-md p-4 flex flex-col items-center">
+            <Download className="h-8 w-8 text-enedis-blue mb-2" />
+            <h3 className="font-medium mb-2">Télécharger votre récépissé</h3>
+            <p className="text-sm text-gray-600 mb-3">Conservez ce document comme référence de votre demande</p>
+            <Button variant="outline" className="w-full">Télécharger PDF</Button>
+          </div>
+          
+          <div className="border border-enedis-blue/20 rounded-md p-4 flex flex-col items-center">
+            <Calendar className="h-8 w-8 text-enedis-blue mb-2" />
+            <h3 className="font-medium mb-2">Suivre votre demande</h3>
+            <p className="text-sm text-gray-600 mb-3">Consultez l'état d'avancement de votre dossier</p>
+            <Button variant="outline" className="w-full">Espace client</Button>
+          </div>
+        </div>
+        
         <p className="text-sm text-enedis-gray-600 mb-8">
           Si vous avez des questions, n'hésitez pas à nous contacter par email à <a href="mailto:contact@racco-service.com" className="text-enedis-blue hover:underline">contact@racco-service.com</a> ou par téléphone au <span className="font-medium">01 23 45 67 89</span>.
         </p>
@@ -52,3 +84,10 @@ const ThankYou = () => {
 };
 
 export default ThankYou;
+
+// Type definition for Google Ads gtag
+declare global {
+  interface Window {
+    gtag: (command: string, action: string, params: object) => void;
+  }
+}

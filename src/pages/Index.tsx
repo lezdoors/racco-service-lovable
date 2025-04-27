@@ -1,5 +1,6 @@
 import MultiStepForm from "@/components/forms/MultiStepForm";
 import { Check, Info, MapPin, Phone, Mail, Calendar, Clock, FileText } from "lucide-react";
+
 const Index = () => {
   return <div className="min-h-screen bg-pattern-light">
       <section className="bg-gradient-to-b from-france-navy to-blue-900 text-white relative overflow-hidden">
@@ -223,7 +224,7 @@ en France pour toutes demandes de raccordement Enedis</h2>
                   </div>
                   <div>
                     <h3 className="font-playfair font-medium">Téléphone</h3>
-                    <p className="text-gray-600 fr-phone" data-prefix="+33" data-p1="9" data-p2="70" data-p3="83" data-p4="19" data-p5="70">+33 9 70 83 19 70</p>
+                    <p className="text-gray-600">+33 9 70 83 19 70</p>
                     <p className="text-sm text-gray-500">Du lundi au vendredi, 8h-18h</p>
                   </div>
                 </div>
@@ -234,19 +235,7 @@ en France pour toutes demandes de raccordement Enedis</h2>
                   </div>
                   <div>
                     <h3 className="font-playfair font-medium">Email</h3>
-                    <p className="text-gray-600">contact@enedis.fr</p>
-                    <p className="text-sm text-gray-500">Nous répondons sous 48h</p>
-                  </div>
-                </div>
-                
-                <div className="flex">
-                  <div className="bg-france-blueLight rounded-full p-3 mr-4">
-                    <MapPin className="w-6 h-6 text-france-navy" />
-                  </div>
-                  <div>
-                    <h3 className="font-playfair font-medium">Adresse</h3>
-                    <p className="text-gray-600">34 Place des Corolles, 92400 Courbevoie</p>
-                    <p className="text-sm text-gray-500">Siège social</p>
+                    <p className="text-gray-600">contact@racco-service.com</p>
                   </div>
                 </div>
 

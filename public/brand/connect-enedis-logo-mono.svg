@@ -1,0 +1,10 @@
+
+<svg width="240" height="60" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {/* Monochrome version - all in Enedis blue */}
+  <path d="M20 40V25L30 15L40 25V40H35V30H25V40H20Z" fill="#0063AF"/>
+  <path d="M27 35H33V38H27V35Z" fill="#0063AF"/>
+  <path d="M27 31H33V34H27V31Z" fill="#0063AF"/>
+  <path d="M45 30C55 30 60 20 70 20C80 20 85 30 95 30" stroke="#0063AF" strokeWidth="3" strokeLinecap="round"/>
+  <path opacity="0.1" d="M85 10h30v30h-30z" stroke="#0063AF" strokeWidth="0.5" strokeDasharray="2 2"/>
+  <text x="100" y="35" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" fill="#0063AF">Connect Enedis</text>
+</svg>

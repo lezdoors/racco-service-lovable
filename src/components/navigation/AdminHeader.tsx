@@ -1,4 +1,3 @@
-
 import { Bell, Menu, Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
+import LogoAnimation from "../brand/LogoAnimation";
 
 interface AdminHeaderProps {
   toggleSidebar: () => void;
@@ -27,7 +27,9 @@ const AdminHeader = ({ toggleSidebar }: AdminHeaderProps) => {
         >
           <Menu size={20} />
         </Button>
-        <div className="relative max-w-md hidden md:block">
+        <LogoAnimation variant="mono" className="h-8 hidden md:block" />
+        
+        <div className="relative max-w-md hidden md:block ml-6">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
           <input
             className="bg-enedis-gray-100 pl-9 pr-4 py-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-enedis-blue"

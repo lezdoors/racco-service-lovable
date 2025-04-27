@@ -1,0 +1,14 @@
+
+<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {/* Icon-only version for favicon/mobile */}
+  <path d="M20 40V25L30 15L40 25V40H35V30H25V40H20Z" fill="#0063AF"/>
+  <path d="M27 35H33V38H27V35Z" fill="#94C11F"/>
+  <path d="M27 31H33V34H27V31Z" fill="#94C11F"/>
+  <path d="M45 30C48 30 50 28 53 28" stroke="url(#flow-gradient)" strokeWidth="3" strokeLinecap="round"/>
+  <defs>
+    <linearGradient id="flow-gradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stopColor="#0063AF"/>
+      <stop offset="100%" stopColor="#94C11F"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,8 +1,8 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import LogoAnimation from "../brand/LogoAnimation";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -11,14 +11,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 border-b bg-white">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
-          <img 
-            src="/logo-enedis.svg" 
-            alt="Enedis" 
-            className="h-10 w-auto"
-            onError={(e) => {
-              e.currentTarget.src = "https://placeholder.co/100x40/0063AF/FFFFFF?text=ENEDIS";
-            }}
-          />
+          <LogoAnimation className="h-10" animate={true} />
         </Link>
 
         {/* Desktop Navigation */}

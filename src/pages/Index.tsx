@@ -1,6 +1,5 @@
 import MultiStepForm from "@/components/forms/MultiStepForm";
 import { Check, Info, MapPin, Phone, Mail, Calendar, Clock, FileText } from "lucide-react";
-
 const Index = () => {
   return <div className="min-h-screen bg-pattern-light">
       <section className="bg-gradient-to-b from-france-navy to-blue-900 text-white relative overflow-hidden">
@@ -245,7 +244,7 @@ en France pour toutes demandes de raccordement Enedis</h2>
                   </div>
                   <div>
                     <h3 className="font-playfair font-medium">Horaires</h3>
-                    <p className="text-gray-600">Lun-Ven: 8h-12h, 14h-18h</p>
+                    <p className="text-gray-600">Lun-Ven: 8h-18h</p>
                     <p className="text-sm text-gray-500">Fermé les jours fériés français</p>
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import ProjectInfoStep from "./steps/ProjectInfoStep";
 import TechnicalDetailsStep from "./steps/TechnicalDetailsStep";
@@ -10,6 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClient } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
 
 // Define our form schema using zod
 const formSchema = z.object({
@@ -52,9 +54,18 @@ const formSchema = z.object({
 
 export type FormData = z.infer<typeof formSchema>;
 
+// Initialize Supabase client
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+const FORM_STORAGE_KEY = 'enedis-form-data';
+
 const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const steps = [
     { name: "Informations du projet", component: ProjectInfoStep },
@@ -85,7 +96,45 @@ const MultiStepForm = () => {
     mode: "onChange"
   });
   
-  const { handleSubmit, trigger, formState: { isValid, errors } } = methods;
+  // Load saved form data from localStorage
+  useEffect(() => {
+    const savedData = localStorage.getItem(FORM_STORAGE_KEY);
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        // Convert string dates back to Date objects
+        if (parsed.completionDate) {
+          parsed.completionDate = new Date(parsed.completionDate);
+        }
+        if (parsed.appointmentDate) {
+          parsed.appointmentDate = new Date(parsed.appointmentDate);
+        }
+        methods.reset(parsed);
+        
+        // Optionally restore step
+        const savedStep = localStorage.getItem(FORM_STORAGE_KEY + '-step');
+        if (savedStep) {
+          setCurrentStep(parseInt(savedStep, 10));
+        }
+        
+        toast({
+          title: "Formulaire restauré",
+          description: "Vos données précédemment enregistrées ont été restaurées.",
+        });
+      } catch (error) {
+        console.error("Error restoring form data:", error);
+      }
+    }
+  }, []);
+  
+  // Save form data to localStorage when it changes
+  const saveFormData = () => {
+    const values = methods.getValues();
+    localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(values));
+    localStorage.setItem(FORM_STORAGE_KEY + '-step', currentStep.toString());
+  };
+  
+  const { handleSubmit, trigger, formState: { isValid, errors }, getValues } = methods;
   
   const nextStep = async () => {
     const fieldsToValidate = getFieldsToValidate(currentStep);
@@ -93,6 +142,7 @@ const MultiStepForm = () => {
     
     if (result) {
       if (currentStep < steps.length - 1) {
+        saveFormData();
         setCurrentStep(prev => prev + 1);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -107,6 +157,7 @@ const MultiStepForm = () => {
   
   const prevStep = () => {
     if (currentStep > 0) {
+      saveFormData();
       setCurrentStep(prev => prev - 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -141,13 +192,35 @@ const MultiStepForm = () => {
     }
   };
   
-  const onSubmit = (data: FormData) => {
-    console.log("Form submitted successfully", data);
-    toast({
-      title: "Demande envoyée !",
-      description: "Votre demande de raccordement a bien été envoyée. Un email de confirmation vous a été envoyé.",
-    });
-    // In a real application, you would send this data to your backend
+  const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
+    try {
+      // Save form data to localStorage
+      localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(data));
+      
+      console.log("Form submitted successfully", data);
+      
+      // Create checkout session with Stripe
+      const { data: sessionData, error } = await supabase.functions.invoke('create-checkout', {
+        body: { formData: data }
+      });
+      
+      if (error || !sessionData?.url) {
+        throw new Error(error?.message || "Impossible de créer la session de paiement");
+      }
+      
+      // Redirect to Stripe checkout
+      window.location.href = sessionData.url;
+      
+    } catch (error) {
+      console.error("Payment error:", error);
+      toast({
+        title: "Erreur de paiement",
+        description: "Une erreur s'est produite lors de la création de votre session de paiement. Veuillez réessayer.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    }
   };
   
   const CurrentStepComponent = steps[currentStep].component;
@@ -170,7 +243,7 @@ const MultiStepForm = () => {
               type="button"
               variant="outline"
               onClick={prevStep}
-              disabled={currentStep === 0}
+              disabled={currentStep === 0 || isLoading}
             >
               Précédent
             </Button>
@@ -180,6 +253,7 @@ const MultiStepForm = () => {
                 type="button"
                 onClick={nextStep}
                 className="bg-enedis-blue hover:bg-blue-700 text-white"
+                disabled={isLoading}
               >
                 Suivant
               </Button>
@@ -187,8 +261,9 @@ const MultiStepForm = () => {
               <Button 
                 type="submit"
                 className="bg-enedis-green hover:bg-green-600 text-enedis-gray-800"
+                disabled={isLoading}
               >
-                Soumettre ma demande
+                {isLoading ? "Chargement..." : "Payer et soumettre ma demande"}
               </Button>
             )}
           </div>

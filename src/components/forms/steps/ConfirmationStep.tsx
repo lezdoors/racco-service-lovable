@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { formatPrice } from "@/lib/stripe-config";
 
 const ConfirmationStep = () => {
   const { control, watch, formState: { errors } } = useFormContext<FormData>();
@@ -32,6 +33,8 @@ const ConfirmationStep = () => {
     existing: "Compteur existant à remplacer",
     upgrade: "Augmentation de puissance (compteur existant)",
   };
+
+  const paymentAmount = 99; // 99€
 
   return (
     <div className="space-y-6">
@@ -125,6 +128,16 @@ const ConfirmationStep = () => {
           </div>
         </dl>
       </div>
+      
+      <div className="bg-green-50 border border-green-200 rounded-md p-4">
+        <h3 className="font-medium text-green-800 mb-2">Détails du paiement</h3>
+        <p className="text-sm text-green-700 mb-2">
+          Frais de dossier pour votre demande de raccordement : {formatPrice(paymentAmount)}
+        </p>
+        <p className="text-xs text-green-600">
+          En cliquant sur "Payer et soumettre ma demande", vous serez redirigé vers notre plateforme de paiement sécurisée.
+        </p>
+      </div>
 
       <div className="border-t pt-6">
         <div className="flex items-start">
@@ -161,7 +174,8 @@ const ConfirmationStep = () => {
       <div className="bg-enedis-blue bg-opacity-10 rounded-md p-4 mt-6">
         <h4 className="text-enedis-blue font-medium mb-2">Étapes suivantes</h4>
         <ol className="list-decimal list-inside text-sm space-y-2 text-gray-700">
-          <li>Vous recevrez un email de confirmation avec votre numéro de référence.</li>
+          <li>Vous serez redirigé vers une page de paiement sécurisée.</li>
+          <li>Après validation du paiement, vous recevrez un email de confirmation avec votre numéro de référence.</li>
           <li>Un conseiller Enedis examinera votre demande sous 5 jours ouvrés.</li>
           <li>Un technicien vous contactera pour planifier une visite si nécessaire.</li>
           <li>Vous recevrez une proposition technique et financière détaillée.</li>

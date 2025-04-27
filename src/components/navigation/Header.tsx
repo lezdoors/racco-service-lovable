@@ -12,7 +12,7 @@ const Header = () => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      const headerOffset = 80; // Height of the fixed header
+      const headerOffset = 80;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -48,13 +48,6 @@ const Header = () => {
             À propos
           </a>
           <a 
-            href="#demande" 
-            onClick={(e) => scrollToSection(e, "demande")}
-            className="text-enedis-gray-700 hover:text-enedis-blue font-medium cursor-pointer"
-          >
-            Faire ma demande
-          </a>
-          <a 
             href="#contact" 
             onClick={(e) => scrollToSection(e, "contact")}
             className="text-enedis-gray-700 hover:text-enedis-blue font-medium cursor-pointer"
@@ -62,8 +55,20 @@ const Header = () => {
             Contact
           </a>
           <Button 
-            variant="default"
-            className="bg-enedis-blue hover:bg-blue-700 text-white cursor-pointer"
+            asChild
+            size="lg"
+            className="bg-enedis-green hover:bg-green-600 text-enedis-gray-800 font-bold shadow-lg hover:shadow-xl transition-all"
+          >
+            <a
+              href="#demande"
+              onClick={(e) => scrollToSection(e, "demande")}
+            >
+              Faire ma demande
+            </a>
+          </Button>
+          <Button 
+            variant="outline"
+            className="text-enedis-gray-700 hover:text-enedis-blue cursor-pointer"
             asChild
           >
             <Link to="/admin">Administration</Link>
@@ -82,6 +87,18 @@ const Header = () => {
         {mobileMenuOpen && (
           <nav className="md:hidden absolute top-full left-0 right-0 bg-white py-4 px-4 border-t shadow-lg z-40">
             <div className="flex flex-col space-y-4">
+              <Button 
+                asChild
+                size="lg"
+                className="bg-enedis-green hover:bg-green-600 text-enedis-gray-800 font-bold shadow-lg hover:shadow-xl transition-all w-full mb-4"
+              >
+                <a
+                  href="#demande"
+                  onClick={(e) => scrollToSection(e, "demande")}
+                >
+                  Faire ma demande
+                </a>
+              </Button>
               <a 
                 href="#services" 
                 onClick={(e) => scrollToSection(e, "services")}
@@ -97,13 +114,6 @@ const Header = () => {
                 À propos
               </a>
               <a 
-                href="#demande" 
-                onClick={(e) => scrollToSection(e, "demande")}
-                className="text-enedis-gray-700 hover:text-enedis-blue font-medium py-2 cursor-pointer"
-              >
-                Faire ma demande
-              </a>
-              <a 
                 href="#contact" 
                 onClick={(e) => scrollToSection(e, "contact")}
                 className="text-enedis-gray-700 hover:text-enedis-blue font-medium py-2 cursor-pointer"
@@ -111,8 +121,8 @@ const Header = () => {
                 Contact
               </a>
               <Button 
-                variant="default"
-                className="bg-enedis-blue hover:bg-blue-700 text-white w-full cursor-pointer"
+                variant="outline"
+                className="text-enedis-gray-700 hover:text-enedis-blue w-full cursor-pointer"
                 asChild
                 onClick={() => setMobileMenuOpen(false)}
               >

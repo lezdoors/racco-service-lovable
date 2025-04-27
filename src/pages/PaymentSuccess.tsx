@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const PaymentSuccess = () => {
@@ -13,18 +13,30 @@ const PaymentSuccess = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Clear the form data from localStorage so they can start fresh next time
+    if (!sessionId) {
+      navigate("/");
+      return;
+    }
+
+    // Clear the form data from localStorage
     localStorage.removeItem("enedis-form-data");
     localStorage.removeItem("enedis-form-data-step");
     
-    // Show success toast
     toast({
-      title: "Paiement réussi !",
-      description: "Votre demande de raccordement a bien été envoyée.",
+      title: "Merci pour votre demande !",
+      description: "Nous avons bien reçu votre paiement. Vous recevrez un email de confirmation sous peu.",
     });
     
     setIsVerifying(false);
-  }, []);
+  }, [sessionId, navigate, toast]);
+
+  if (isVerifying) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-enedis-blue" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center py-12 px-4">
@@ -34,22 +46,32 @@ const PaymentSuccess = () => {
             <CheckCircle size={48} className="text-green-600" />
           </div>
         </div>
+        
         <h1 className="text-2xl font-bold text-enedis-gray-800 mb-4">
-          Paiement confirmé
+          Merci pour votre confiance !
         </h1>
-        <p className="text-gray-600 mb-6">
-          Votre demande de raccordement a bien été enregistrée et votre paiement a été traité avec succès. 
-          Un email de confirmation vous a été envoyé avec tous les détails de votre demande.
-        </p>
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-          <p className="text-sm text-green-800">
-            Un conseiller Enedis examinera votre demande dans les meilleurs délais et vous contactera 
-            pour les prochaines étapes. Votre numéro de référence est : 
-            <span className="font-bold block mt-1">
+        
+        <div className="space-y-4 text-left mb-8">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <h2 className="font-semibold mb-2">Prochaines étapes :</h2>
+            <ul className="list-disc list-inside space-y-2 text-sm text-green-800">
+              <li>Vous allez recevoir un email de confirmation dans quelques minutes</li>
+              <li>Un conseiller Enedis examinera votre dossier sous 48h ouvrées</li>
+              <li>Nous vous contacterons pour planifier une visite technique si nécessaire</li>
+            </ul>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h2 className="font-semibold mb-2">Votre référence :</h2>
+            <p className="text-blue-800 font-mono">
               {sessionId ? sessionId.substring(0, 8).toUpperCase() : "ENE-" + Math.random().toString(36).substring(2, 10).toUpperCase()}
-            </span>
-          </p>
+            </p>
+            <p className="text-sm text-blue-600 mt-1">
+              Conservez cette référence pour le suivi de votre dossier
+            </p>
+          </div>
         </div>
+
         <div className="space-y-4">
           <Button 
             onClick={() => navigate("/")}
@@ -57,6 +79,9 @@ const PaymentSuccess = () => {
           >
             Retour à l'accueil
           </Button>
+          <p className="text-sm text-gray-500">
+            Des questions ? Contactez-nous au 09 70 83 19 70
+          </p>
         </div>
       </div>
     </div>

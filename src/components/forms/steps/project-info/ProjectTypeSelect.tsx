@@ -1,7 +1,7 @@
 
 import { Controller, useFormContext } from "react-hook-form";
 import { FormData } from "@/hooks/useMultiStepForm";
-import { Label } from "@/components/ui/label";
+import { FieldLabel } from "@/components/ui/field-label";
 import {
   Select,
   SelectContent,
@@ -22,7 +22,12 @@ export const ProjectTypeSelect = () => {
 
   return (
     <div>
-      <Label htmlFor="projectType" className="required-field">Type de projet</Label>
+      <FieldLabel 
+        htmlFor="projectType" 
+        label="Type de projet" 
+        tooltip="Sélectionnez le type de projet qui correspond à votre situation. Un nouveau raccordement concerne une nouvelle construction, une augmentation de puissance s'applique à un raccordement existant, un raccordement provisoire est temporaire (chantier, événement), et une rénovation concerne des modifications d'une installation existante."
+        required
+      />
       <Controller
         name="projectType"
         control={control}

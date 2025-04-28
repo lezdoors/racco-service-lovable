@@ -2,7 +2,7 @@
 import { useFormContext } from "react-hook-form";
 import { FormData } from "@/hooks/useMultiStepForm";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FieldLabel } from "@/components/ui/field-label";
 
 export const AddressFields = () => {
   const { register, formState: { errors } } = useFormContext<FormData>();
@@ -10,7 +10,12 @@ export const AddressFields = () => {
   return (
     <>
       <div>
-        <Label htmlFor="address">Adresse du site</Label>
+        <FieldLabel 
+          htmlFor="address" 
+          label="Adresse du site" 
+          tooltip="Indiquez l'adresse précise où les travaux de raccordement doivent être réalisés. Cette adresse peut être différente de votre adresse de facturation."
+          required
+        />
         <Input
           id="address"
           placeholder="123 rue de la République"
@@ -24,7 +29,12 @@ export const AddressFields = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="city">Ville</Label>
+          <FieldLabel 
+            htmlFor="city" 
+            label="Ville" 
+            tooltip="Indiquez la commune où se trouve le site à raccorder."
+            required
+          />
           <Input
             id="city"
             placeholder="Paris"
@@ -36,7 +46,12 @@ export const AddressFields = () => {
           )}
         </div>
         <div>
-          <Label htmlFor="postalCode">Code postal</Label>
+          <FieldLabel 
+            htmlFor="postalCode" 
+            label="Code postal" 
+            tooltip="Le code postal est nécessaire pour identifier votre secteur géographique et déterminer l'agence Enedis qui traitera votre demande."
+            required
+          />
           <Input
             id="postalCode"
             placeholder="75001"

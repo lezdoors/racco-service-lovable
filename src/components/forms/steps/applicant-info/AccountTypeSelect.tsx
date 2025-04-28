@@ -1,7 +1,7 @@
 
 import { Controller, useFormContext } from "react-hook-form";
 import { FormData } from "@/hooks/useMultiStepForm";
-import { Label } from "@/components/ui/label";
+import { FieldLabel } from "@/components/ui/field-label";
 import { 
   Select, 
   SelectContent, 
@@ -21,7 +21,11 @@ export const AccountTypeSelect = () => {
 
   return (
     <div>
-      <Label htmlFor="accountType">Type de compte</Label>
+      <FieldLabel 
+        htmlFor="accountType" 
+        label="Type de compte"
+        tooltip="Sélectionnez le type de compte qui correspond à votre situation. Les professionnels et gestionnaires d'immeubles doivent également indiquer le nom de leur entreprise."
+      />
       <Controller
         name="accountType"
         control={control}

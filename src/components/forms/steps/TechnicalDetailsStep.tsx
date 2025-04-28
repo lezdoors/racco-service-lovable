@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { InfoBox } from "@/components/ui/InfoBox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Controller } from "react-hook-form";
+import { FieldLabel } from "@/components/ui/field-label";
 
 const TechnicalDetailsStep = () => {
   const { register, control, formState: { errors } } = useFormContext<FormData>();
@@ -16,7 +17,12 @@ const TechnicalDetailsStep = () => {
       <h2 className="text-xl font-semibold text-enedis-gray-800">Détails techniques</h2>
 
       <div>
-        <Label htmlFor="meterStatus" className="required-field">État du compteur</Label>
+        <FieldLabel 
+          htmlFor="meterStatus" 
+          label="État du compteur" 
+          tooltip="Indiquez si un compteur électrique est déjà présent sur le site. En cas de nouvelle construction, sélectionnez 'Nouveau compteur'. Pour une rénovation ou modification, sélectionnez 'Compteur existant'. Si vous ne savez pas, notre technicien pourra vous aider lors de la visite."
+          required
+        />
         <Controller
           name="meterStatus"
           control={control}
@@ -58,13 +64,20 @@ const TechnicalDetailsStep = () => {
             />
           )}
         />
-        <Label htmlFor="has-existing-connection">
-          Un raccordement existe déjà sur le site
-        </Label>
+        <FieldLabel 
+          htmlFor="has-existing-connection" 
+          label="Un raccordement existe déjà sur le site" 
+          tooltip="Cochez cette case si le site dispose déjà d'un raccordement électrique, même s'il n'est pas en service. Cette information est importante pour déterminer si des travaux d'extension ou de modification sont nécessaires."
+        />
       </div>
 
       <div>
-        <Label htmlFor="buildingSpecs" className="required-field">Description du bâtiment et des travaux</Label>
+        <FieldLabel 
+          htmlFor="buildingSpecs" 
+          label="Description du bâtiment et des travaux" 
+          tooltip="Décrivez précisément votre projet: type de bâtiment (maison, immeuble, local commercial), surface, nombre de logements, nature des travaux. Plus votre description sera détaillée, plus notre devis sera adapté à vos besoins réels."
+          required
+        />
         <Textarea
           id="buildingSpecs"
           placeholder="Décrivez votre projet en détail (type de bâtiment, surface, nombre de logements, etc.)"
@@ -77,7 +90,11 @@ const TechnicalDetailsStep = () => {
       </div>
 
       <div>
-        <Label htmlFor="additionalNotes">Remarques complémentaires</Label>
+        <FieldLabel 
+          htmlFor="additionalNotes" 
+          label="Remarques complémentaires" 
+          tooltip="Ajoutez ici toute information supplémentaire qui pourrait être utile pour le traitement de votre demande, comme des contraintes d'accès au site, des spécificités techniques particulières, ou des demandes spéciales."
+        />
         <Textarea
           id="additionalNotes"
           placeholder="Informations supplémentaires qui pourraient nous aider à traiter votre demande"

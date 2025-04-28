@@ -1,7 +1,7 @@
 
 import { Controller, useFormContext } from "react-hook-form";
 import { FormData } from "@/hooks/useMultiStepForm";
-import { Label } from "@/components/ui/label";
+import { FieldLabel } from "@/components/ui/field-label";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
@@ -19,7 +19,10 @@ export const AppointmentDatePicker = () => {
 
   return (
     <div>
-      <Label>Date de visite technique souhaitée</Label>
+      <FieldLabel 
+        label="Date de visite technique souhaitée" 
+        tooltip="Proposez une date pour la visite technique (minimum 3 jours ouvrables). Cette date est indicative, un technicien vous contactera pour confirmer un rendez-vous selon les disponibilités."
+      />
       <p className="text-sm text-gray-500 mb-2">Facultatif - Un technicien vous contactera pour confirmer</p>
       <Controller
         control={control}

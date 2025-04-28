@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { FormData } from "@/hooks/useMultiStepForm";
-import { Label } from "@/components/ui/label";
+import { FieldLabel } from "@/components/ui/field-label";
 import { Slider } from "@/components/ui/slider";
 
 export const PowerRequirements = () => {
@@ -11,7 +11,11 @@ export const PowerRequirements = () => {
 
   return (
     <div>
-      <Label>Puissance requise (kVA)</Label>
+      <FieldLabel 
+        label="Puissance requise (kVA)" 
+        tooltip="La puissance en kVA (kilovolt-ampères) détermine la capacité électrique de votre installation. Pour un logement standard, 6 à 9 kVA suffit généralement. Des équipements spécifiques ou des usages professionnels peuvent nécessiter une puissance plus élevée."
+        required
+      />
       <div className="flex items-center mt-2">
         <Controller
           control={control}

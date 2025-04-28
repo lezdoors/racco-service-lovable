@@ -1,15 +1,20 @@
 
 import { Controller, useFormContext } from "react-hook-form";
 import { FormData } from "@/hooks/useMultiStepForm";
-import { Label } from "@/components/ui/label";
+import { FieldLabel } from "@/components/ui/field-label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 export const ContactPreference = () => {
   const { control, formState: { errors } } = useFormContext<FormData>();
 
   return (
     <div>
-      <Label className="required-field">Méthode de contact préférée</Label>
+      <FieldLabel 
+        label="Méthode de contact préférée" 
+        tooltip="Comment préférez-vous être contacté pour le suivi de votre demande? Nous respecterons votre choix pour toutes les communications."
+        required
+      />
       <Controller
         name="preferredContact"
         control={control}

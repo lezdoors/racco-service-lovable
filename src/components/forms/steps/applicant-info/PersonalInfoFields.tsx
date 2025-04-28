@@ -3,22 +3,21 @@ import { useFormContext } from "react-hook-form";
 import { FormData } from "@/hooks/useMultiStepForm";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { 
-  Form,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage 
-} from "@/components/ui/form";
+import { FieldLabel } from "@/components/ui/field-label";
 
 export const PersonalInfoFields = () => {
-  const { control, register, formState: { errors } } = useFormContext<FormData>();
+  const { register, formState: { errors } } = useFormContext<FormData>();
 
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="firstName" className="required-field">Prénom</Label>
+          <FieldLabel 
+            htmlFor="firstName" 
+            label="Prénom" 
+            tooltip="Indiquez votre prénom tel qu'il apparaît sur vos documents officiels."
+            required
+          />
           <Input
             id="firstName"
             placeholder="Jean"
@@ -31,7 +30,12 @@ export const PersonalInfoFields = () => {
         </div>
         
         <div>
-          <Label htmlFor="lastName" className="required-field">Nom</Label>
+          <FieldLabel 
+            htmlFor="lastName" 
+            label="Nom" 
+            tooltip="Indiquez votre nom de famille tel qu'il apparaît sur vos documents officiels."
+            required
+          />
           <Input
             id="lastName"
             placeholder="Dupont"
@@ -46,7 +50,12 @@ export const PersonalInfoFields = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="email" className="required-field">Email</Label>
+          <FieldLabel 
+            htmlFor="email" 
+            label="Email" 
+            tooltip="Votre adresse email sera utilisée pour vous envoyer des informations importantes concernant votre demande de raccordement."
+            required
+          />
           <Input
             id="email"
             type="email"
@@ -59,7 +68,12 @@ export const PersonalInfoFields = () => {
           )}
         </div>
         <div>
-          <Label htmlFor="phone" className="required-field">Téléphone</Label>
+          <FieldLabel 
+            htmlFor="phone" 
+            label="Téléphone" 
+            tooltip="Votre numéro de téléphone nous permettra de vous contacter rapidement si nécessaire. Format préféré: 06 12 34 56 78."
+            required
+          />
           <Input
             id="phone"
             type="tel"

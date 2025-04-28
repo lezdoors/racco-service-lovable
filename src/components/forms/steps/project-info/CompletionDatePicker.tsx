@@ -1,7 +1,7 @@
 
 import { Controller, useFormContext } from "react-hook-form";
 import { FormData } from "@/hooks/useMultiStepForm";
-import { Label } from "@/components/ui/label";
+import { FieldLabel } from "@/components/ui/field-label";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -19,7 +19,11 @@ export const CompletionDatePicker = () => {
 
   return (
     <div>
-      <Label>Date de fin de projet prévue</Label>
+      <FieldLabel 
+        label="Date de fin de projet prévue" 
+        tooltip="Cette date nous aide à planifier les interventions en fonction de l'avancement de votre projet. Elle correspond à la date à laquelle vous souhaitez que le raccordement soit opérationnel."
+        required
+      />
       <Controller
         control={control}
         name="completionDate"

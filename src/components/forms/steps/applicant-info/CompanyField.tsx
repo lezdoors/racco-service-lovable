@@ -2,7 +2,7 @@
 import { useFormContext } from "react-hook-form";
 import { FormData } from "@/hooks/useMultiStepForm";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FieldLabel } from "@/components/ui/field-label";
 
 export const CompanyField = () => {
   const { register, watch, formState: { errors } } = useFormContext<FormData>();
@@ -15,7 +15,12 @@ export const CompanyField = () => {
   
   return (
     <div>
-      <Label htmlFor="company" className="required-field">Nom de l'entreprise</Label>
+      <FieldLabel 
+        htmlFor="company" 
+        label="Nom de l'entreprise" 
+        tooltip="Indiquez le nom officiel de votre entreprise ou de la société que vous représentez. Ce nom apparaîtra sur tous les documents administratifs."
+        required
+      />
       <Input
         id="company"
         placeholder="Nom de votre entreprise"

@@ -1,7 +1,7 @@
 
 import { Controller, useFormContext } from "react-hook-form";
 import { FormData } from "@/hooks/useMultiStepForm";
-import { Label } from "@/components/ui/label";
+import { FieldLabel } from "@/components/ui/field-label";
 import { cn } from "@/lib/utils";
 
 export const ConnectionTypeSelector = () => {
@@ -9,7 +9,11 @@ export const ConnectionTypeSelector = () => {
 
   return (
     <div>
-      <Label>Type de raccordement</Label>
+      <FieldLabel 
+        label="Type de raccordement" 
+        tooltip="Le monophasé (230V) convient aux logements standards et petits commerces. Le triphasé (400V) est recommandé pour les équipements industriels, les moteurs puissants, ou les installations nécessitant une puissance élevée."
+        required
+      />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
         <Controller
           control={control}

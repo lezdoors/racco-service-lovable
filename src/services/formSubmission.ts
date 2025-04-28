@@ -1,7 +1,7 @@
 
 import { FormData, PartialLeadData } from "@/hooks/useMultiStepForm";
 import { submitCompleteForm } from "./completeSubmissionService";
-import { submitPartialLead } from "./partialLeadService";
+import { submitPartialLead as submitPartialLeadService } from "./partialLeadService";
 import { toast } from "@/hooks/use-toast";
 import logger from "@/services/loggingService";
 
@@ -41,13 +41,13 @@ const submitForm = async (formData: FormData) => {
 };
 
 // Enhanced partial lead submission with configuration check
-const submitPartialLead = async (data: PartialLeadData) => {
+const submitPartialData = async (data: PartialLeadData) => {
   if (!checkWebhookConfiguration()) {
     logger.warning("Configuration de webhook incomplète. Les données partielles peuvent ne pas être envoyées.");
     // Continue anyway for partial leads, but log warning
   }
   
-  return submitPartialLead(data);
+  return submitPartialLeadService(data);
 };
 
-export { submitForm, submitPartialLead };
+export { submitForm, submitPartialData as submitPartialLead };

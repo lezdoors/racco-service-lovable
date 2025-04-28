@@ -1,3 +1,4 @@
+
 import logger from "./loggingService";
 import { toast } from "@/hooks/use-toast";
 
@@ -92,7 +93,25 @@ class WebhookService {
   }
   
   public async sendWebhook(endpoint: string, data: any, retries = 2, retryDelay = 1000): Promise<WebhookResult> {
+    // Log complete endpoint for debugging
     logger.info(`Sending webhook to ${endpoint}`, { data });
+    
+    // Check if webhook URL is properly formed
+    if (!endpoint || !endpoint.startsWith('http')) {
+      logger.error(`Invalid webhook URL: ${endpoint}`);
+      toast({
+        title: "Erreur de configuration",
+        description: `L'URL du webhook n'est pas valide: ${endpoint}. Veuillez vérifier votre configuration.`,
+        variant: "destructive",
+      });
+      
+      return {
+        success: false,
+        message: `Invalid webhook URL: ${endpoint}`,
+        timestamp: new Date().toISOString()
+      };
+    }
+    
     const startTime = Date.now();
     
     try {
@@ -180,6 +199,16 @@ export async function sendWebhookWithNotification(
   errorMessage: string = "Échec de l'envoi des données"
 ): Promise<boolean> {
   try {
+    if (!endpoint) {
+      toast({
+        title: "Configuration manquante",
+        description: "L'URL du webhook n'est pas configurée. Veuillez configurer les variables d'environnement.",
+        variant: "destructive",
+      });
+      logger.warning("Missing webhook URL", { data });
+      return false;
+    }
+    
     const result = await webhookService.sendWebhook(endpoint, data);
     
     if (!result.success) {

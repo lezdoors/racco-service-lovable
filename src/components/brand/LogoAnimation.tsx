@@ -1,17 +1,19 @@
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, forwardRef } from 'react';
 
 interface LogoAnimationProps {
   variant?: 'full' | 'mono' | 'white' | 'mark';
   className?: string;
   animate?: boolean;
+  onClick?: () => void;
 }
 
-const LogoAnimation = ({
+const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
   variant = 'full',
   className = '',
-  animate = true
-}: LogoAnimationProps) => {
+  animate = true,
+  onClick
+}, ref) => {
   const objectRef = useRef<HTMLObjectElement>(null);
 
   useEffect(() => {
@@ -42,15 +44,33 @@ const LogoAnimation = ({
     'mark'
   }.svg`;
 
+  // Create a div wrapper that can receive clicks
   return (
-    <object
-      ref={objectRef}
-      data={logoPath}
-      type="image/svg+xml"
-      className={`w-auto h-full ${className}`}
-      aria-label="Connect Enedis Logo"
-    />
+    <div 
+      ref={ref}
+      className={`${className} cursor-pointer`} 
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          onClick?.();
+        }
+      }}
+    >
+      <object
+        ref={objectRef}
+        data={logoPath}
+        type="image/svg+xml"
+        className="w-auto h-full"
+        aria-label="Connect Enedis Logo"
+        // This prevents the object from capturing clicks
+        style={{ pointerEvents: 'none' }}
+      />
+    </div>
   );
-};
+});
+
+LogoAnimation.displayName = 'LogoAnimation';
 
 export default LogoAnimation;

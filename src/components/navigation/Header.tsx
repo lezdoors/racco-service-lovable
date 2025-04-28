@@ -1,12 +1,13 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import LogoAnimation from "../brand/LogoAnimation";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -24,12 +25,21 @@ const Header = () => {
     setMobileMenuOpen(false);
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b bg-white">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
-        <Link to="/" className="flex items-center space-x-2">
-          <LogoAnimation className="h-10" animate={true} />
-        </Link>
+        <div className="flex items-center space-x-2">
+          <LogoAnimation 
+            className="h-10" 
+            animate={true} 
+            onClick={handleLogoClick}
+          />
+        </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6">

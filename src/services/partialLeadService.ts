@@ -1,11 +1,18 @@
 
 import { PartialLeadData } from "@/hooks/useMultiStepForm";
 import { sendWebhookWithNotification } from "./webhooks";
+import logger from "./loggingService";
+import { trackPartialLeadSubmission } from "@/lib/google-tag-manager";
 
 export const submitPartialLead = async (data: PartialLeadData) => {
+  logger.info("Submitting partial lead", data);
+  
   try {
+    // Track partial lead submission in analytics
+    trackPartialLeadSubmission(data);
+    
     // Track all notification attempts for partial lead
-    const notifications = await Promise.all([
+    const notifications = await Promise.allSettled([
       // Add to Google Sheets
       sendWebhookWithNotification(
         import.meta.env.VITE_ZAPIER_SHEETS_WEBHOOK,
@@ -44,11 +51,29 @@ export const submitPartialLead = async (data: PartialLeadData) => {
     ]);
 
     // Log notification results
-    console.log("Partial lead notification results:", notifications);
+    logger.info("Partial lead notification results", { 
+      results: notifications.map((result, index) => ({
+        service: ["GoogleSheets", "Email", "CRM"][index],
+        status: result.status,
+        value: result.status === 'fulfilled' ? result.value : null,
+        reason: result.status === 'rejected' ? result.reason : null
+      }))
+    });
     
-    return true;
+    // Consider the partial lead submission successful if at least one notification succeeded
+    const anySuccess = notifications.some(
+      result => result.status === 'fulfilled' && result.value === true
+    );
+    
+    if (anySuccess) {
+      logger.success("Partial lead submitted successfully (at least one notification service worked)");
+      return true;
+    } else {
+      logger.warning("All partial lead notifications failed");
+      return false;
+    }
   } catch (error) {
-    console.error("Error submitting partial lead:", error);
+    logger.error("Error submitting partial lead", error);
     throw error;
   }
 };

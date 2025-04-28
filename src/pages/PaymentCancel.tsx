@@ -4,22 +4,34 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import logger from "@/services/loggingService";
+import { trackFormSubmission } from "@/lib/google-tag-manager";
 
 const PaymentCancel = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
+    // Log the cancellation
+    logger.warning("Payment was cancelled by user");
+    
+    // Show toast notification
     toast({
       title: "Paiement annulé",
       description: "Votre demande n'a pas été finalisée car le paiement a été annulé.",
       variant: "destructive",
     });
-  }, []);
+    
+    // Track the cancellation in analytics
+    trackFormSubmission(false);
+  }, [toast]);
 
   const handleRetry = () => {
+    logger.info("User attempting to retry payment");
+    
     // Navigate back to the form's last step
     navigate("/#demande");
+    
     // Scroll to the form
     setTimeout(() => {
       const formElement = document.getElementById("demande");
@@ -52,7 +64,10 @@ const PaymentCancel = () => {
             Réessayer le paiement
           </Button>
           <Button 
-            onClick={() => navigate("/")}
+            onClick={() => {
+              logger.info("User returned to homepage from payment cancel page");
+              navigate("/");
+            }}
             variant="outline"
             className="w-full"
           >

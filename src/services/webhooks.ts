@@ -1,94 +1,209 @@
-
+import logger from "./loggingService";
 import { toast } from "@/hooks/use-toast";
 
-// Maximum number of retries for failed webhooks
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000; // 1 second
-
-interface WebhookPayload {
-  [key: string]: any;
-}
-
-interface WebhookResponse {
+interface WebhookResult {
   success: boolean;
-  error?: string;
-  retryCount?: number;
+  status?: number;
+  message?: string;
+  data?: any;
+  timestamp: string;
 }
 
-// Helper to delay between retries
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+interface WebhookAnalytics {
+  totalCalls: number;
+  successfulCalls: number;
+  failedCalls: number;
+  averageResponseTime: number;
+}
 
-export const sendWebhook = async (
-  webhookUrl: string | undefined,
-  payload: WebhookPayload,
-  options = { maxRetries: MAX_RETRIES }
-): Promise<WebhookResponse> => {
-  if (!webhookUrl) {
-    console.warn(`Webhook URL not configured: ${JSON.stringify(payload)}`);
-    return { success: false, error: "Webhook URL not configured" };
-  }
-
-  let retryCount = 0;
-
-  while (retryCount <= options.maxRetries) {
+class WebhookService {
+  private static instance: WebhookService;
+  private analytics: WebhookAnalytics = {
+    totalCalls: 0,
+    successfulCalls: 0,
+    failedCalls: 0,
+    averageResponseTime: 0
+  };
+  private results: Record<string, WebhookResult[]> = {};
+  private MAX_RESULTS_PER_ENDPOINT = 20;
+  
+  private constructor() {
+    // Load analytics from localStorage if available
     try {
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "no-cors",
-        body: JSON.stringify({
-          ...payload,
-          timestamp: new Date().toISOString(),
-          retryCount,
-        }),
-      });
-
-      // Since we're using no-cors, we'll assume success unless an error is thrown
-      console.log(`Webhook sent successfully to ${webhookUrl}`, {
-        payload,
-        retryCount,
-      });
-
-      return { success: true, retryCount };
-    } catch (error) {
-      console.error(`Webhook attempt ${retryCount + 1} failed:`, error);
-      
-      if (retryCount < options.maxRetries) {
-        await delay(RETRY_DELAY * Math.pow(2, retryCount)); // Exponential backoff
-        retryCount++;
-      } else {
-        return {
-          success: false,
-          error: error instanceof Error ? error.message : "Unknown error",
-          retryCount,
-        };
+      const savedAnalytics = localStorage.getItem('webhook_analytics');
+      if (savedAnalytics) {
+        this.analytics = JSON.parse(savedAnalytics);
       }
+    } catch (error) {
+      logger.error("Failed to load webhook analytics from localStorage", error);
     }
   }
+  
+  public static getInstance(): WebhookService {
+    if (!WebhookService.instance) {
+      WebhookService.instance = new WebhookService();
+    }
+    return WebhookService.instance;
+  }
+  
+  private updateAnalytics(success: boolean, responseTime: number): void {
+    this.analytics.totalCalls++;
+    if (success) {
+      this.analytics.successfulCalls++;
+    } else {
+      this.analytics.failedCalls++;
+    }
+    
+    // Update average response time
+    const totalTime = this.analytics.averageResponseTime * (this.analytics.totalCalls - 1) + responseTime;
+    this.analytics.averageResponseTime = totalTime / this.analytics.totalCalls;
+    
+    // Persist analytics
+    try {
+      localStorage.setItem('webhook_analytics', JSON.stringify(this.analytics));
+    } catch (error) {
+      logger.error("Failed to persist webhook analytics", error);
+    }
+  }
+  
+  private recordResult(endpoint: string, result: WebhookResult): void {
+    if (!this.results[endpoint]) {
+      this.results[endpoint] = [];
+    }
+    
+    // Add result to the beginning of the array
+    this.results[endpoint].unshift(result);
+    
+    // Limit the number of results we keep per endpoint
+    if (this.results[endpoint].length > this.MAX_RESULTS_PER_ENDPOINT) {
+      this.results[endpoint] = this.results[endpoint].slice(0, this.MAX_RESULTS_PER_ENDPOINT);
+    }
+  }
+  
+  public getAnalytics(): WebhookAnalytics {
+    return {...this.analytics};
+  }
+  
+  public getResults(endpoint?: string): Record<string, WebhookResult[]> | WebhookResult[] {
+    if (endpoint) {
+      return this.results[endpoint] || [];
+    }
+    return {...this.results};
+  }
+  
+  public async sendWebhook(endpoint: string, data: any, retries = 2, retryDelay = 1000): Promise<WebhookResult> {
+    logger.info(`Sending webhook to ${endpoint}`, { data });
+    const startTime = Date.now();
+    
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'no-cors', // This is necessary for cross-origin requests to many webhook providers
+        body: JSON.stringify(data),
+      });
+      
+      const endTime = Date.now();
+      const responseTime = endTime - startTime;
+      
+      // With no-cors we can't actually check the response status,
+      // so we assume success unless there's an exception
+      const result: WebhookResult = {
+        success: true,
+        message: 'Webhook sent successfully',
+        timestamp: new Date().toISOString()
+      };
+      
+      this.updateAnalytics(true, responseTime);
+      this.recordResult(endpoint, result);
+      logger.success(`Webhook to ${endpoint} succeeded in ${responseTime}ms`);
+      
+      return result;
+    } catch (error) {
+      const endTime = Date.now();
+      const responseTime = endTime - startTime;
+      
+      logger.error(`Webhook to ${endpoint} failed`, error);
+      
+      // Implement retry logic
+      if (retries > 0) {
+        logger.info(`Retrying webhook to ${endpoint} in ${retryDelay}ms (${retries} retries left)`);
+        
+        return new Promise(resolve => {
+          setTimeout(async () => {
+            const retryResult = await this.sendWebhook(endpoint, data, retries - 1, retryDelay * 2);
+            resolve(retryResult);
+          }, retryDelay);
+        });
+      }
+      
+      // All retries failed
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const result: WebhookResult = {
+        success: false,
+        message: `Failed after all retry attempts: ${errorMessage}`,
+        timestamp: new Date().toISOString(),
+        data: error
+      };
+      
+      this.updateAnalytics(false, responseTime);
+      this.recordResult(endpoint, result);
+      
+      return result;
+    }
+  }
+  
+  public resetAnalytics(): void {
+    this.analytics = {
+      totalCalls: 0,
+      successfulCalls: 0,
+      failedCalls: 0,
+      averageResponseTime: 0
+    };
+    
+    try {
+      localStorage.setItem('webhook_analytics', JSON.stringify(this.analytics));
+    } catch (error) {
+      logger.error("Failed to reset webhook analytics", error);
+    }
+  }
+}
 
-  return {
-    success: false,
-    error: "Max retries exceeded",
-    retryCount,
-  };
-};
+const webhookService = WebhookService.getInstance();
 
-export const sendWebhookWithNotification = async (
-  webhookUrl: string | undefined,
-  payload: WebhookPayload,
-  description: string
-): Promise<WebhookResponse> => {
-  const result = await sendWebhook(webhookUrl, payload);
-
-  if (!result.success) {
+// Function to send webhook with notification
+export async function sendWebhookWithNotification(
+  endpoint: string, 
+  data: any, 
+  errorMessage: string = "Échec de l'envoi des données"
+): Promise<boolean> {
+  try {
+    const result = await webhookService.sendWebhook(endpoint, data);
+    
+    if (!result.success) {
+      toast({
+        title: "Avertissement",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      logger.warning(errorMessage, { endpoint, data, result });
+      return false;
+    }
+    
+    return true;
+  } catch (error) {
+    const errorDetails = error instanceof Error ? error.message : "Erreur inconnue";
     toast({
-      title: "Erreur de notification",
-      description: `${description} - ${result.error}. Réessayez plus tard.`,
+      title: "Erreur",
+      description: `${errorMessage}: ${errorDetails}`,
       variant: "destructive",
     });
+    logger.error(`${errorMessage}: ${errorDetails}`, { endpoint, data, error });
+    return false;
   }
+}
 
-  return result;
-};
+// Export the webhook service for analytics access
+export { webhookService };

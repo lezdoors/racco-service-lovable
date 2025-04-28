@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { FormProvider } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { trackFormStep, trackFormSubmission } from "@/lib/google-tag-manager";
+import logger from "@/services/loggingService";
 
 const MultiStepForm = () => {
   const { currentStep, isLoading, setIsLoading, methods, nextStep, prevStep, hasSubmittedPartialLead, setHasSubmittedPartialLead } = useMultiStepForm();
@@ -32,10 +33,11 @@ const MultiStepForm = () => {
       // Only submit if all essential fields are filled
       if (firstName && lastName && email && phone) {
         try {
+          logger.info("Attempting to submit partial lead", { firstName, lastName, email, phone });
           setIsLoading(true);
           await submitPartialLead({ firstName, lastName, email, phone });
           setHasSubmittedPartialLead(true);
-          console.log("Partial lead submitted successfully");
+          logger.success("Partial lead submitted successfully");
           
           // Track partial lead submission with Google Tag Manager
           if (typeof window !== 'undefined' && window.dataLayer) {
@@ -45,7 +47,7 @@ const MultiStepForm = () => {
             });
           }
         } catch (error) {
-          console.error("Error submitting partial lead:", error);
+          logger.error("Error submitting partial lead", error);
           // Silently fail - don't block the user from proceeding
         } finally {
           setIsLoading(false);
@@ -58,23 +60,26 @@ const MultiStepForm = () => {
   useEffect(() => {
     // Track form step changes
     trackFormStep(currentStep + 1, steps[currentStep].name);
+    logger.info(`Form step changed to ${currentStep + 1}: ${steps[currentStep].name}`);
   }, [currentStep]);
 
   const onSubmit = async (data: FormData) => {
+    logger.info("Form submission initiated", { formData: data });
     setIsLoading(true);
     setAttemptedSubmit(true);
     try {
-      console.log("Form submitted successfully", data);
+      logger.info("Processing form submission");
       const checkoutUrl = await submitForm(data);
       
       // Track form completion
       trackFormSubmission(true);
+      logger.success("Form submitted successfully, redirecting to checkout", { checkoutUrl });
       
       // Redirect to payment page or thank you page
       window.location.href = checkoutUrl;
     } catch (error) {
-      console.error("Payment error:", error);
       const errorMessage = error instanceof Error ? error.message : "Erreur inconnue";
+      logger.error("Payment error", { error: errorMessage, formData: data });
       toast({
         title: "Erreur de paiement",
         description: `Une erreur s'est produite: ${errorMessage}. Veuillez vérifier la configuration ou réessayer.`,

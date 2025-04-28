@@ -21,6 +21,9 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: ['Lato', 'sans-serif'],
+				lato: ['Lato', 'sans-serif'],
+				montserrat: ['Montserrat', 'sans-serif'],
+				poppins: ['Poppins', 'sans-serif'],
 				serif: ['Playfair Display', 'serif'],
 				playfair: ['Playfair Display', 'serif'],
 			},
@@ -138,6 +141,10 @@ export default {
 					'0%': { transform: 'translateY(-20px)', opacity: '0' },
 					'100%': { transform: 'translateY(0)', opacity: '1' }
 				},
+				pulse: {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' }
+				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -145,6 +152,7 @@ export default {
 				fadeIn: 'fadeIn 0.5s ease-out forwards',
 				slideUp: 'slideUp 0.5s ease-out forwards',
 				slideDown: 'slideDown 0.5s ease-out forwards',
+				pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 			},
 			backgroundImage: {
 				'french-pattern': "url('/patterns/french-pattern.svg')",

@@ -6,29 +6,35 @@ import { trackPartialLeadSubmission } from "@/lib/google-tag-manager";
 import { toast } from "@/hooks/use-toast";
 
 export const submitPartialLead = async (data: PartialLeadData) => {
-  logger.info("Submitting partial lead", data);
+  logger.info("Soumission des informations partielles du lead", data);
   
   try {
-    // Track partial lead submission in analytics
+    // Track the partial lead submission in analytics
     trackPartialLeadSubmission(data);
     
     // Show toast notification to user
     toast({
       title: "Informations enregistrées",
-      description: "Nous avons bien reçu vos informations de contact. Continuez pour finaliser votre demande.",
+      description: "Nous avons bien reçu vos coordonnées. Continuez pour finaliser votre demande.",
+      duration: 5000,
     });
     
-    // Track all notification attempts for partial lead
+    // Track all notification attempts for partial lead with more detailed data
+    const enrichedData = {
+      ...data,
+      status: "Partiel",
+      timestamp: new Date().toISOString(),
+      source: "Formulaire Web",
+      language: navigator.language,
+      pageUrl: window.location.href,
+      referrer: document.referrer || "Direct",
+    };
+    
     const notifications = await Promise.allSettled([
       // Add to Google Sheets
       sendWebhookWithNotification(
         import.meta.env.VITE_ZAPIER_SHEETS_WEBHOOK,
-        {
-          ...data,
-          status: "Partiel",
-          timestamp: new Date().toISOString(),
-          source: "Formulaire Web"
-        },
+        enrichedData,
         "Erreur lors de l'ajout dans Google Sheets"
       ),
       
@@ -38,9 +44,8 @@ export const submitPartialLead = async (data: PartialLeadData) => {
         {
           to: "contact@racco-service.com",
           subject: "Nouveau prospect partiel - Racco-Service",
-          ...data,
-          leadType: "Partiel",
-          timestamp: new Date().toISOString()
+          ...enrichedData,
+          leadType: "Partiel"
         },
         "Erreur lors de l'envoi de l'email"
       ),
@@ -48,18 +53,13 @@ export const submitPartialLead = async (data: PartialLeadData) => {
       // Add to CRM
       sendWebhookWithNotification(
         import.meta.env.VITE_ZAPIER_CRM_WEBHOOK,
-        {
-          ...data,
-          status: "Partiel",
-          source: "Formulaire Web",
-          timestamp: new Date().toISOString()
-        },
+        enrichedData,
         "Erreur lors de l'ajout dans le CRM"
       )
     ]);
 
     // Log notification results
-    logger.info("Partial lead notification results", { 
+    logger.info("Résultats des notifications de lead partiel", { 
       results: notifications.map((result, index) => ({
         service: ["GoogleSheets", "Email", "CRM"][index],
         status: result.status,
@@ -74,14 +74,14 @@ export const submitPartialLead = async (data: PartialLeadData) => {
     );
     
     if (anySuccess) {
-      logger.success("Partial lead submitted successfully (at least one notification service worked)");
+      logger.success("Lead partiel soumis avec succès (au moins un service de notification a fonctionné)");
       return true;
     } else {
-      logger.warning("All partial lead notifications failed");
+      logger.warning("Toutes les notifications de lead partiel ont échoué");
       return false;
     }
   } catch (error) {
-    logger.error("Error submitting partial lead", error);
+    logger.error("Erreur lors de la soumission du lead partiel", error);
     throw error;
   }
 };

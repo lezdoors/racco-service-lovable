@@ -15,6 +15,7 @@ const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
   onClick
 }, ref) => {
   const objectRef = useRef<HTMLObjectElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!animate || !objectRef.current) return;
@@ -44,28 +45,43 @@ const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
     'mark'
   }.svg`;
 
+  // Improved handling for click events 
+  const handleClick = (e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
+    if (onClick) {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick();
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleClick(e);
+    }
+  };
+
   // Create a div wrapper that can receive clicks
   return (
     <div 
-      ref={ref}
-      className={`${className} cursor-pointer`} 
-      onClick={onClick}
+      ref={ref || containerRef}
+      className={`${className} cursor-pointer relative`}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          onClick?.();
-        }
-      }}
+      aria-label="Logo Connect Enedis"
     >
       <object
         ref={objectRef}
         data={logoPath}
         type="image/svg+xml"
-        className="w-auto h-full"
-        aria-label="Connect Enedis Logo"
-        // This prevents the object from capturing clicks
-        style={{ pointerEvents: 'none' }}
+        className="w-auto h-full pointer-events-none"
+        aria-hidden="true"
+      />
+      {/* Invisible overlay to ensure clicks work everywhere on the logo */}
+      <div 
+        className="absolute inset-0" 
+        aria-hidden="true"
       />
     </div>
   );

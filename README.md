@@ -1,73 +1,38 @@
-# Welcome to your Lovable project
 
-## Project info
+# Connect Enedis - Application de Raccordement
 
-**URL**: https://lovable.dev/projects/5418b5cb-5448-42b9-8181-3a5a8425b35c
+Cette application permet aux utilisateurs de demander un raccordement électrique Enedis de manière simple et rapide.
 
-## How can I edit this code?
+## Configuration de l'environnement
 
-There are several ways of editing your application.
+Pour que l'application fonctionne correctement, vous devez configurer un fichier `.env` avec les variables d'environnement suivantes :
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/5418b5cb-5448-42b9-8181-3a5a8425b35c) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+VITE_ZAPIER_CRM_WEBHOOK=https://hooks.zapier.com/hooks/catch/...  # Webhook Zapier pour le CRM
+VITE_ZAPIER_EMAIL_WEBHOOK=https://hooks.zapier.com/hooks/catch/... # Webhook Zapier pour les emails
+VITE_ZAPIER_SHEETS_WEBHOOK=https://hooks.zapier.com/hooks/catch/... # Webhook Zapier pour Google Sheets
+VITE_GOOGLE_TAG_MANAGER_ID=GTM-XXXXXX # ID Google Tag Manager
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_... # Clé publique Stripe
 ```
 
-**Edit a file directly in GitHub**
+## Démarrage rapide
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Clonez le dépôt
+2. Installez les dépendances avec `npm install`
+3. Créez un fichier `.env` avec les variables d'environnement nécessaires
+4. Lancez l'application en mode développement avec `npm run dev`
 
-**Use GitHub Codespaces**
+## Fonctionnalités
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- Formulaire de demande de raccordement en plusieurs étapes
+- Intégration CRM via Zapier
+- Paiement sécurisé avec Stripe
+- Interface administration pour la gestion des demandes
 
-## What technologies are used for this project?
+## Structure du projet
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/5418b5cb-5448-42b9-8181-3a5a8425b35c) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- `/src/components` - Composants React réutilisables
+- `/src/pages` - Pages principales de l'application
+- `/src/hooks` - Hooks React personnalisés
+- `/src/services` - Services pour les API et autres fonctionnalités
+- `/src/lib` - Utilitaires et configurations

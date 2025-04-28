@@ -11,9 +11,10 @@ import {
 } from "@/components/ui/select";
 
 const projectTypes = [
-  { value: "new", label: "Nouvelle construction" },
-  { value: "renovation", label: "Rénovation" },
-  { value: "increase", label: "Augmentation de puissance" }
+  { value: "new_connection", label: "Nouveau raccordement" },
+  { value: "power_increase", label: "Augmentation de puissance" },
+  { value: "temporary", label: "Raccordement provisoire" },
+  { value: "renovation", label: "Rénovation / Modification installation" }
 ];
 
 export const ProjectTypeSelect = () => {
@@ -21,7 +22,7 @@ export const ProjectTypeSelect = () => {
 
   return (
     <div>
-      <Label htmlFor="projectType">Type de projet</Label>
+      <Label htmlFor="projectType" className="required-field">Type de projet</Label>
       <Controller
         name="projectType"
         control={control}

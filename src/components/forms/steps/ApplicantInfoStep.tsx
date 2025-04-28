@@ -3,6 +3,7 @@ import { PersonalInfoFields } from "./applicant-info/PersonalInfoFields";
 import { AccountTypeSelect } from "./applicant-info/AccountTypeSelect";
 import { ContactPreference } from "./applicant-info/ContactPreference";
 import { AppointmentDatePicker } from "./applicant-info/AppointmentDatePicker";
+import { CompanyField } from "./applicant-info/CompanyField";
 import { InfoBox } from "@/components/ui/InfoBox";
 
 const ApplicantInfoStep = () => {
@@ -13,14 +14,15 @@ const ApplicantInfoStep = () => {
       <div className="space-y-4">
         <PersonalInfoFields />
         <AccountTypeSelect />
+        <CompanyField />
         <ContactPreference />
         <AppointmentDatePicker />
       </div>
       
       <InfoBox 
-        title="Information sur la visite technique"
-        content="Une visite technique peut être nécessaire pour évaluer précisément les besoins de raccordement. 
-          Nos techniciens sont disponibles du lundi au vendredi, de 8h à 17h. Un délai minimum de 3 jours ouvrés est nécessaire pour planifier la visite."
+        title="Information importante"
+        content="Vos coordonnées nous permettent de vous contacter pour planifier votre raccordement. 
+          Nous vous contacterons sous 48h pour confirmer votre demande."
         type="info"
       />
     </div>

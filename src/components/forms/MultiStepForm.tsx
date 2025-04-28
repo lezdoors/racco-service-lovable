@@ -19,9 +19,9 @@ const MultiStepForm = () => {
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
   
   const steps = [
-    { name: "Informations du demandeur", component: ApplicantInfoStep },
-    { name: "Informations du projet", component: ProjectInfoStep },
-    { name: "Détails techniques", component: TechnicalDetailsStep },
+    { name: "Demandeur", component: ApplicantInfoStep },
+    { name: "Projet", component: ProjectInfoStep },
+    { name: "Technique", component: TechnicalDetailsStep },
     { name: "Confirmation", component: ConfirmationStep }
   ];
 
@@ -46,6 +46,11 @@ const MultiStepForm = () => {
               formPartiallyCompleted: true
             });
           }
+          
+          toast({
+            title: "Informations enregistrées",
+            description: "Vos coordonnées ont été enregistrées. Continuez pour compléter votre demande.",
+          });
         } catch (error) {
           logger.error("Error submitting partial lead", error);
           // Silently fail - don't block the user from proceeding
@@ -140,7 +145,7 @@ const MultiStepForm = () => {
                 className="bg-enedis-blue hover:bg-blue-700 text-white"
                 disabled={isLoading}
               >
-                {isLoading ? "Chargement..." : "Suivant"}
+                {isLoading ? "Chargement..." : "Continuer"}
               </Button>
             ) : (
               <Button 

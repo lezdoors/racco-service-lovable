@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 
-// Move the form schema to a separate file for better organization
+// Form schema definition
 export const formSchema = z.object({
   // Personal Information (Step 1 - Essential Information)
   firstName: z.string().min(2, "Le prénom est requis"),
@@ -21,12 +21,15 @@ export const formSchema = z.object({
     required_error: "Veuillez sélectionner une méthode de contact préférée",
   }),
   appointmentDate: z.date().optional(),
+  company: z.string().optional(),
   
   // Project Information (Step 2)
-  projectType: z.string().min(1, "Le type de projet est requis"),
+  projectType: z.enum(["new_connection", "power_increase", "temporary", "renovation"], {
+    required_error: "Le type de projet est requis",
+  }),
   address: z.string().min(5, "L'adresse est requise"),
   city: z.string().min(2, "La ville est requise"),
-  postalCode: z.string().min(5, "Le code postal est requis"),
+  postalCode: z.string().min(5, "Le code postal est requis").max(5, "Le code postal doit contenir 5 chiffres"),
   completionDate: z.date({
     required_error: "Une date de fin est requise",
   }),
@@ -36,10 +39,14 @@ export const formSchema = z.object({
   }),
   
   // Technical Details (Step 3)
-  meterStatus: z.string().optional(),
+  meterStatus: z.enum(["new", "existing", "unknown"], {
+    required_error: "Veuillez indiquer l'état du compteur",
+  }).optional(),
   buildingSpecs: z.string().min(5, "Des spécifications détaillées sont requises"),
   connectionDistance: z.number().optional(),
+  hasExistingConnection: z.boolean().optional(),
   documents: z.array(z.any()).optional(),
+  additionalNotes: z.string().optional(),
   
   // Confirmation (Step 4)
   termsAccepted: z.boolean().refine(val => val === true, {
@@ -52,7 +59,7 @@ export type FormData = z.infer<typeof formSchema>;
 // For partial lead submission (Step 1 only)
 export type PartialLeadData = Pick<FormData, 'firstName' | 'lastName' | 'email' | 'phone'>;
 
-const FORM_STORAGE_KEY = 'enedis-form-data';
+const FORM_STORAGE_KEY = 'racco-service-form-data';
 
 export const useMultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -67,7 +74,8 @@ export const useMultiStepForm = () => {
       lastName: "",
       email: "",
       phone: "",
-      projectType: "",
+      company: "",
+      projectType: "new_connection",
       address: "",
       city: "",
       postalCode: "",
@@ -78,6 +86,9 @@ export const useMultiStepForm = () => {
       documents: [],
       accountType: "individual",
       preferredContact: "email",
+      hasExistingConnection: false,
+      meterStatus: "new",
+      additionalNotes: "",
       termsAccepted: false,
     },
     mode: "onChange"
@@ -125,7 +136,7 @@ export const useMultiStepForm = () => {
       case 1:
         return ["projectType", "address", "city", "postalCode", "completionDate", "capacity", "connectionType"];
       case 2:
-        return ["buildingSpecs"];
+        return ["buildingSpecs", "meterStatus"];
       case 3:
         return ["termsAccepted"];
       default:

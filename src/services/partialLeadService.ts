@@ -3,6 +3,7 @@ import { PartialLeadData } from "@/hooks/useMultiStepForm";
 import { sendWebhookWithNotification } from "./webhooks";
 import logger from "./loggingService";
 import { trackPartialLeadSubmission } from "@/lib/google-tag-manager";
+import { toast } from "@/hooks/use-toast";
 
 export const submitPartialLead = async (data: PartialLeadData) => {
   logger.info("Submitting partial lead", data);
@@ -10,6 +11,12 @@ export const submitPartialLead = async (data: PartialLeadData) => {
   try {
     // Track partial lead submission in analytics
     trackPartialLeadSubmission(data);
+    
+    // Show toast notification to user
+    toast({
+      title: "Informations enregistrées",
+      description: "Nous avons bien reçu vos informations de contact. Continuez pour finaliser votre demande.",
+    });
     
     // Track all notification attempts for partial lead
     const notifications = await Promise.allSettled([
@@ -19,7 +26,8 @@ export const submitPartialLead = async (data: PartialLeadData) => {
         {
           ...data,
           status: "Partiel",
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          source: "Formulaire Web"
         },
         "Erreur lors de l'ajout dans Google Sheets"
       ),
@@ -43,7 +51,7 @@ export const submitPartialLead = async (data: PartialLeadData) => {
         {
           ...data,
           status: "Partiel",
-          source: "Website Form",
+          source: "Formulaire Web",
           timestamp: new Date().toISOString()
         },
         "Erreur lors de l'ajout dans le CRM"

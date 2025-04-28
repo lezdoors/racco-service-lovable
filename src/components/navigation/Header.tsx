@@ -1,147 +1,145 @@
 
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import LogoAnimation from "../brand/LogoAnimation";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Header = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      const headerOffset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
-    setMobileMenuOpen(false);
-  };
-
-  const handleLogoClick = () => {
-    navigate('/');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between relative">
-        <div className="flex items-center space-x-2">
-          <LogoAnimation 
-            className="h-10" 
-            animate={true} 
-            onClick={handleLogoClick}
-          />
-        </div>
+    <header
+      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
+        isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
+      }`}
+    >
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center">
+          <Link to="/" className="flex items-center">
+            <img
+              src="/logo-enedis.svg"
+              alt="Connect Enedis"
+              className="h-8 md:h-10"
+            />
+            <span className={`ml-2 font-bold text-lg ${isScrolled ? "text-enedis-gray-800" : "text-white"}`}>
+              Connect Enedis
+            </span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6">
-          <a 
-            href="#services" 
-            onClick={(e) => scrollToSection(e, "services")}
-            className="text-enedis-gray-700 hover:text-enedis-blue font-medium cursor-pointer"
-          >
-            Nos Services
-          </a>
-          <a 
-            href="#about" 
-            onClick={(e) => scrollToSection(e, "about")}
-            className="text-enedis-gray-700 hover:text-enedis-blue font-medium cursor-pointer"
-          >
-            À propos
-          </a>
-          <a 
-            href="#contact" 
-            onClick={(e) => scrollToSection(e, "contact")}
-            className="text-enedis-gray-700 hover:text-enedis-blue font-medium cursor-pointer"
-          >
-            Contact
-          </a>
-          <Button 
-            asChild
-            size="lg"
-            className="bg-enedis-green hover:bg-green-600 text-enedis-gray-800 font-bold shadow-lg hover:shadow-xl transition-all"
-          >
-            <a
-              href="#demande"
-              onClick={(e) => scrollToSection(e, "demande")}
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-1">
+            <Link
+              to="/services"
+              className={`px-4 py-2 rounded-md transition-colors ${
+                isScrolled
+                  ? "text-enedis-gray-800 hover:bg-gray-100"
+                  : "text-white hover:bg-white/10"
+              }`}
             >
-              Faire ma demande
-            </a>
-          </Button>
-          <Button 
-            variant="outline"
-            className="text-enedis-gray-700 hover:text-enedis-blue cursor-pointer"
-            asChild
-          >
-            <Link to="/admin">Administration</Link>
-          </Button>
-        </nav>
-
-        {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden focus:outline-none cursor-pointer z-50" 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <nav className="md:hidden absolute top-full left-0 right-0 bg-white py-4 px-4 border-t shadow-lg z-40">
-            <div className="flex flex-col space-y-4">
-              <Button 
-                asChild
-                size="lg"
-                className="bg-enedis-green hover:bg-green-600 text-enedis-gray-800 font-bold shadow-lg hover:shadow-xl transition-all w-full mb-4"
-              >
-                <a
-                  href="#demande"
-                  onClick={(e) => scrollToSection(e, "demande")}
-                >
-                  Faire ma demande
-                </a>
-              </Button>
-              <a 
-                href="#services" 
-                onClick={(e) => scrollToSection(e, "services")}
-                className="text-enedis-gray-700 hover:text-enedis-blue font-medium py-2 cursor-pointer"
-              >
-                Nos Services
-              </a>
-              <a 
-                href="#about" 
-                onClick={(e) => scrollToSection(e, "about")}
-                className="text-enedis-gray-700 hover:text-enedis-blue font-medium py-2 cursor-pointer"
-              >
-                À propos
-              </a>
-              <a 
-                href="#contact" 
-                onClick={(e) => scrollToSection(e, "contact")}
-                className="text-enedis-gray-700 hover:text-enedis-blue font-medium py-2 cursor-pointer"
-              >
-                Contact
-              </a>
-              <Button 
-                variant="outline"
-                className="text-enedis-gray-700 hover:text-enedis-blue w-full cursor-pointer"
-                asChild
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Link to="/admin">Administration</Link>
-              </Button>
-            </div>
+              Services
+            </Link>
+            <Link
+              to="/process"
+              className={`px-4 py-2 rounded-md transition-colors ${
+                isScrolled
+                  ? "text-enedis-gray-800 hover:bg-gray-100"
+                  : "text-white hover:bg-white/10"
+              }`}
+            >
+              Comment ça marche
+            </Link>
+            <Link
+              to="/about"
+              className={`px-4 py-2 rounded-md transition-colors ${
+                isScrolled
+                  ? "text-enedis-gray-800 hover:bg-gray-100"
+                  : "text-white hover:bg-white/10"
+              }`}
+            >
+              À propos
+            </Link>
+            <Link
+              to="/contact"
+              className={`px-4 py-2 rounded-md transition-colors ${
+                isScrolled
+                  ? "text-enedis-gray-800 hover:bg-gray-100"
+                  : "text-white hover:bg-white/10"
+              }`}
+            >
+              Contact
+            </Link>
+            <Button 
+              asChild 
+              className={isScrolled ? "bg-france-red text-white hover:bg-red-700" : "bg-white text-france-navy hover:bg-white/90"}
+            >
+              <Link to="/#demande">Faire une demande</Link>
+            </Button>
           </nav>
-        )}
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <X className={isScrolled ? "text-enedis-gray-800" : "text-white"} />
+            ) : (
+              <Menu className={isScrolled ? "text-enedis-gray-800" : "text-white"} />
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Navigation */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-white border-t mt-2 py-4 px-4 shadow-lg">
+          <nav className="flex flex-col space-y-3">
+            <Link
+              to="/services"
+              className="px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
+            >
+              Services
+            </Link>
+            <Link
+              to="/process"
+              className="px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
+            >
+              Comment ça marche
+            </Link>
+            <Link
+              to="/about"
+              className="px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
+            >
+              À propos
+            </Link>
+            <Link
+              to="/contact"
+              className="px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
+            >
+              Contact
+            </Link>
+            <Button asChild className="bg-france-red text-white hover:bg-red-700 w-full">
+              <Link to="/#demande">Faire une demande</Link>
+            </Button>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };

@@ -18,6 +18,10 @@ import { useEffect } from 'react';
 import "./App.css";
 import ThankYou from './pages/ThankYou';
 import { AuthProvider, RequireAuth } from "./hooks/useAuth";
+import ServicesPage from "./pages/Services";
+import AboutPage from "./pages/About";
+import ProcessPage from "./pages/Process";
+import ContactPage from "./pages/Contact";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,6 +48,10 @@ function App() {
             <Routes>
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Index />} />
+                <Route path="services" element={<ServicesPage />} />
+                <Route path="about" element={<AboutPage />} />
+                <Route path="process" element={<ProcessPage />} />
+                <Route path="contact" element={<ContactPage />} />
                 <Route path="success" element={<PaymentSuccess />} />
                 <Route path="cancel" element={<PaymentCancel />} />
                 <Route path="thank-you" element={<ThankYou />} />

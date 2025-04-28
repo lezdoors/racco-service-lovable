@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 
 interface FloatingButtonProps {
   className?: string;
@@ -17,11 +18,12 @@ const FloatingButton = ({ className, href }: FloatingButtonProps) => {
     )}>
       <Button
         size="lg"
-        className="bg-enedis-green hover:bg-green-600 text-enedis-gray-800 font-bold shadow-lg hover:shadow-xl transition-all rounded-full"
+        className="bg-france-red hover:bg-red-700 text-white font-bold shadow-lg hover:shadow-xl transition-all rounded-full flex items-center gap-2"
         asChild
       >
         <Link to={href}>
           Faire ma demande
+          <ArrowRight className="h-4 w-4" />
         </Link>
       </Button>
     </div>

@@ -10,7 +10,7 @@ import ComplianceSection from "@/components/home/ComplianceSection";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-pattern-light">
+    <div className="min-h-screen bg-white">
       <Hero />
       <Services />
       <Process />

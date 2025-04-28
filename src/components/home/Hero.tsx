@@ -1,5 +1,6 @@
 
 import React from "react";
+import { ArrowRight } from "lucide-react";
 
 const Hero = () => {
   return (
@@ -12,14 +13,14 @@ const Hero = () => {
           </h1>
           <div className="french-divider my-6"></div>
           <p className="text-lg md:text-xl opacity-90 mb-8">
-            Simple, rapide et transparent. Demandez votre raccordement électrique en quelques clics.
+            Facilitez votre raccordement électrique avec notre service professionnel. Nous gérons toutes les démarches administratives pour vous.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="#demande"
-              className="fr-button-primary px-8 py-3 rounded-md font-medium transition-colors"
+              className="fr-button-primary px-8 py-3 rounded-md font-medium transition-colors flex items-center"
             >
-              Faire une demande
+              Faire une demande <ArrowRight className="ml-2 h-4 w-4" />
             </a>
             <a
               href="#services"
@@ -27,6 +28,20 @@ const Hero = () => {
             >
               Nos services
             </a>
+          </div>
+          <div className="mt-8 flex flex-wrap justify-center gap-4 text-sm">
+            <div className="flex items-center">
+              <span className="bg-white/20 p-1.5 rounded-full mr-2"></span>
+              <span>Certifié CONSUEL</span>
+            </div>
+            <div className="flex items-center">
+              <span className="bg-white/20 p-1.5 rounded-full mr-2"></span>
+              <span>Réponse en 24h</span>
+            </div>
+            <div className="flex items-center">
+              <span className="bg-white/20 p-1.5 rounded-full mr-2"></span>
+              <span>Satisfaction garantie</span>
+            </div>
           </div>
         </div>
       </div>

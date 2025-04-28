@@ -17,11 +17,11 @@ const CustomFooter = () => {
           <div>
             <h3 className="text-lg font-bold mb-4">Liens utiles</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/#services" className="hover:text-enedis-green transition-colors">Nos services</Link></li>
-              <li><Link to="/#about" className="hover:text-enedis-green transition-colors">À propos</Link></li>
-              <li><Link to="/#process" className="hover:text-enedis-green transition-colors">Comment ça marche</Link></li>
+              <li><Link to="/services" className="hover:text-enedis-green transition-colors">Nos services</Link></li>
+              <li><Link to="/about" className="hover:text-enedis-green transition-colors">À propos</Link></li>
+              <li><Link to="/process" className="hover:text-enedis-green transition-colors">Comment ça marche</Link></li>
               <li><Link to="/#demande" className="hover:text-enedis-green transition-colors">Demande de raccordement</Link></li>
-              <li><Link to="/admin" className="hover:text-enedis-green transition-colors">Espace administration</Link></li>
+              <li><Link to="/contact" className="hover:text-enedis-green transition-colors">Contact</Link></li>
             </ul>
           </div>
           

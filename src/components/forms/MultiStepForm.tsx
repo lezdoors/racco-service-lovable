@@ -40,7 +40,7 @@ const MultiStepForm = () => {
           logger.success("Partial lead submitted successfully");
           
           // Track partial lead submission with Google Tag Manager
-          if (typeof window !== 'undefined' && window.dataLayer) {
+          if (typeof window !== 'undefined' && 'dataLayer' in window) {
             window.dataLayer.push({
               event: 'partialLeadSubmission',
               formPartiallyCompleted: true
@@ -87,7 +87,7 @@ const MultiStepForm = () => {
       });
       
       // Track form submission error
-      if (typeof window !== 'undefined' && window.dataLayer) {
+      if (typeof window !== 'undefined' && 'dataLayer' in window) {
         window.dataLayer.push({
           event: 'formSubmissionError',
           formError: errorMessage

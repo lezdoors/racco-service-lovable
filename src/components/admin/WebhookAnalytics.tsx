@@ -4,12 +4,11 @@ import { Card } from '@/components/ui/card';
 import { webhookService } from '@/services/webhooks';
 import logger from '@/services/loggingService';
 import {
-  Chart,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface AnalyticsCardProps {
   title: string;
@@ -95,9 +94,7 @@ const WebhookAnalytics = () => {
               <BarChart data={chartData}>
                 <XAxis dataKey="name" />
                 <YAxis />
-                <ChartTooltip>
-                  <ChartTooltipContent />
-                </ChartTooltip>
+                <Tooltip content={<CustomTooltip />} />
                 <Bar 
                   dataKey="value" 
                   fill="var(--color-success)" 
@@ -118,6 +115,19 @@ const WebhookAnalytics = () => {
           </p>
         </div>
       )}
+    </div>
+  );
+};
+
+// Custom tooltip component for Recharts
+const CustomTooltip = ({ active, payload }: any) => {
+  if (!active || !payload || !payload.length) {
+    return null;
+  }
+
+  return (
+    <div className="bg-white p-2 border rounded shadow-sm">
+      <p className="font-semibold">{`${payload[0].name} : ${payload[0].value}`}</p>
     </div>
   );
 };

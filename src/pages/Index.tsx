@@ -7,6 +7,7 @@ import RequestForm from "@/components/home/RequestForm";
 import AboutSection from "@/components/home/AboutSection";
 import ContactSection from "@/components/home/ContactSection";
 import ComplianceSection from "@/components/home/ComplianceSection";
+import FloatingButton from "@/components/ui/FloatingButton";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <AboutSection />
       <ContactSection />
       <ComplianceSection />
+      <FloatingButton href="#demande" />
     </div>
   );
 };

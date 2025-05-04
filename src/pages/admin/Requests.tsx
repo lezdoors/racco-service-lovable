@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { 
   Card, 
   CardContent, 
@@ -21,20 +22,39 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
-import { FileText, Filter, Search, User, Mail, Phone, MapPin, Plus } from "lucide-react";
+import { 
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/hooks/useAuth";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { FileText, Filter, Search, User, Mail, Phone, MapPin, Plus, Calendar, Clock, FileX } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-// Mock data for traiteurs (would come from API/database)
-const traiteurs = [
-  { id: 1, name: "Sophie Martin", available: true },
-  { id: 2, name: "Jean Dupont", available: true },
-  { id: 3, name: "Marie Lambert", available: false },
-  { id: 4, name: "Thomas Petit", available: true },
-];
+// Types pour les traiteurs (agents)
+interface Traiteur {
+  id: number;
+  name: string;
+  available: boolean;
+}
 
+// Types pour les demandes clients
 interface Request {
   id: string;
   client: string;
@@ -48,10 +68,27 @@ interface Request {
   priority: string;
   leadStatus: "Partiel" | "Complet";
   assignedTo: { id: number; name: string } | null;
+  prm?: string; // Numéro de Point de Livraison (PDL) ou Point Référence Mesure (PRM)
+  description?: string;
+  documents?: string[];
+  paymentStatus?: "En attente" | "Payé" | "Échec" | "Remboursé";
+  paymentRef?: string;
+  service?: string;
+  price?: string;
 }
 
-// Making sure the mock data adheres to the Request interface type
-const requests: Request[] = [
+// Données mock pour les traiteurs
+const traiteurs: Traiteur[] = [
+  { id: 1, name: "Sophie Martin", available: true },
+  { id: 2, name: "Jean Dupont", available: true },
+  { id: 3, name: "Marie Lambert", available: false },
+  { id: 4, name: "Thomas Petit", available: true },
+  { id: 5, name: "Claire Dubois", available: true },
+  { id: 6, name: "Lucas Bernard", available: true },
+];
+
+// Données mock pour les demandes
+const requestsData: Request[] = [
   {
     id: "REC-2023-4526",
     client: "Martin Dupont",
@@ -65,6 +102,11 @@ const requests: Request[] = [
     priority: "Normal",
     leadStatus: "Partiel",
     assignedTo: null,
+    prm: "12345678901234",
+    description: "Construction d'une maison individuelle nécessitant un nouveau raccordement électrique.",
+    paymentStatus: "En attente",
+    service: "Raccordement standard",
+    price: "290€",
   },
   {
     id: "REC-2023-4525",
@@ -79,6 +121,13 @@ const requests: Request[] = [
     priority: "Élevé",
     leadStatus: "Complet",
     assignedTo: { id: 1, name: "Sophie Martin" },
+    prm: "98765432109876",
+    description: "Augmentation de puissance pour un atelier artisanal, passage de 9 à 12 kVA.",
+    documents: ["attestation_electricien.pdf", "cerfa_augmentation.pdf"],
+    paymentStatus: "Payé",
+    paymentRef: "PAY-12345-ABCDE",
+    service: "Augmentation de puissance",
+    price: "190€",
   },
   {
     id: "REC-2023-4522",
@@ -93,6 +142,12 @@ const requests: Request[] = [
     priority: "Normal",
     leadStatus: "Complet",
     assignedTo: { id: 2, name: "Jean Dupont" },
+    description: "Rénovation complète d'un appartement, vérification de l'installation électrique existante.",
+    documents: ["photos_tableau.jpg", "plan_appartement.pdf"],
+    paymentStatus: "Payé",
+    paymentRef: "PAY-54321-FGHIJ",
+    service: "Diagnostic électrique",
+    price: "150€",
   },
   {
     id: "REC-2023-4518",
@@ -107,6 +162,13 @@ const requests: Request[] = [
     priority: "Normal",
     leadStatus: "Complet",
     assignedTo: null,
+    prm: "45678901234567",
+    description: "Construction d'un local commercial avec installation triphasée.",
+    documents: ["plans_local.pdf", "certificat_conformite.pdf"],
+    paymentStatus: "Payé",
+    paymentRef: "PAY-67890-KLMNO",
+    service: "Raccordement professionnel",
+    price: "450€",
   },
   {
     id: "REC-2023-4515",
@@ -121,6 +183,11 @@ const requests: Request[] = [
     priority: "Urgent",
     leadStatus: "Complet",
     assignedTo: null,
+    description: "Rénovation d'un immeuble de 5 étages, vérification des alimentations par étage.",
+    paymentStatus: "Payé",
+    paymentRef: "PAY-24680-PQRST",
+    service: "Étude technique complexe",
+    price: "750€",
   },
   {
     id: "REC-2023-4512",
@@ -135,6 +202,10 @@ const requests: Request[] = [
     priority: "Normal",
     leadStatus: "Partiel",
     assignedTo: null,
+    prm: "78901234567890",
+    paymentStatus: "En attente",
+    service: "Augmentation de puissance",
+    price: "190€",
   },
   {
     id: "REC-2023-4508",
@@ -149,6 +220,12 @@ const requests: Request[] = [
     priority: "Normal",
     leadStatus: "Complet",
     assignedTo: { id: 4, name: "Thomas Petit" },
+    description: "Maison neuve avec domotique avancée, nécessitant une installation spécifique.",
+    documents: ["plans_domotique.pdf", "schema_electrique.pdf"],
+    paymentStatus: "Payé",
+    paymentRef: "PAY-13579-UVWXY",
+    service: "Raccordement premium",
+    price: "390€",
   },
   {
     id: "REC-2023-4505",
@@ -163,6 +240,50 @@ const requests: Request[] = [
     priority: "Élevé",
     leadStatus: "Partiel",
     assignedTo: null,
+    prm: "23456789012345",
+    description: "Augmentation de puissance pour un atelier de production, passage en triphasé.",
+    paymentStatus: "Échec",
+    service: "Modification de branchement",
+    price: "420€",
+  },
+  {
+    id: "REC-2023-4502",
+    client: "Catherine Blanc",
+    email: "catherine.blanc@example.com",
+    phone: "06 54 32 10 98",
+    projectType: "Déplacement de compteur",
+    date: "13/04/2025",
+    address: "11 Rue des Capucines, 34000 Montpellier",
+    status: "Nouveau",
+    statusColor: "bg-blue-100 text-blue-800",
+    priority: "Normal",
+    leadStatus: "Complet",
+    assignedTo: null,
+    prm: "34567890123456",
+    description: "Déplacement du compteur suite à des travaux d'agrandissement de la maison.",
+    paymentStatus: "En attente",
+    service: "Déplacement de compteur",
+    price: "280€",
+  },
+  {
+    id: "REC-2023-4498",
+    client: "Marc Leroy",
+    email: "marc.leroy@example.com",
+    phone: "07 12 34 56 78",
+    projectType: "Raccordement provisoire",
+    date: "12/04/2025",
+    address: "23 Boulevard Maritime, 06000 Nice",
+    status: "En traitement",
+    statusColor: "bg-yellow-100 text-yellow-800",
+    priority: "Urgent",
+    leadStatus: "Complet",
+    assignedTo: { id: 5, name: "Claire Dubois" },
+    description: "Raccordement provisoire pour un événement sur la plage, durée de 3 jours.",
+    documents: ["autorisation_mairie.pdf", "plan_installation.pdf"],
+    paymentStatus: "Payé",
+    paymentRef: "PAY-97531-ZABCD",
+    service: "Raccordement temporaire",
+    price: "320€",
   },
 ];
 
@@ -171,21 +292,28 @@ const Requests = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
   const [leadStatusFilter, setLeadStatusFilter] = useState("all");
-  const [requestsData, setRequestsData] = useState<Request[]>(requests);
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState("all");
+  const [requests, setRequests] = useState<Request[]>(requestsData);
   const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [newTraiteurDialogOpen, setNewTraiteurDialogOpen] = useState(false);
   const [newTraiteurName, setNewTraiteurName] = useState("");
   const { user } = useAuth();
+  const { toast } = useToast();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
   
   const isAdmin = user?.role === 'admin';
 
-  const filteredRequests = requestsData.filter(request => {
+  // Fonction de filtrage des demandes
+  const filteredRequests = requests.filter(request => {
     const matchesSearch = 
       request.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
       request.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      request.address.toLowerCase().includes(searchTerm.toLowerCase());
+      request.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (request.email && request.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (request.phone && request.phone.toLowerCase().includes(searchTerm.toLowerCase()));
       
     const matchesStatus = statusFilter === "all" || 
       request.status.toLowerCase() === statusFilter.toLowerCase();
@@ -196,35 +324,105 @@ const Requests = () => {
     const matchesLeadStatus = leadStatusFilter === "all" ||
       request.leadStatus.toLowerCase() === leadStatusFilter.toLowerCase();
       
-    return matchesSearch && matchesStatus && matchesType && matchesLeadStatus;
+    const matchesPaymentStatus = paymentStatusFilter === "all" ||
+      (request.paymentStatus && request.paymentStatus.toLowerCase() === paymentStatusFilter.toLowerCase());
+      
+    return matchesSearch && matchesStatus && matchesType && matchesLeadStatus && matchesPaymentStatus;
   });
 
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredRequests.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
+
+  // Fonctions pour la pagination
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  // Fonction pour assigner un traiteur à une demande
   const handleAssignTraiteur = (traiteurId: number) => {
     if (!selectedRequest) return;
     
     const selectedTraiteur = traiteurs.find(t => t.id === traiteurId);
     if (!selectedTraiteur) return;
     
-    const updatedRequests = requestsData.map(req => 
+    const updatedRequests = requests.map(req => 
       req.id === selectedRequest.id 
         ? { ...req, assignedTo: { id: traiteurId, name: selectedTraiteur.name } } 
         : req
     );
     
-    setRequestsData(updatedRequests);
+    setRequests(updatedRequests);
     setAssignDialogOpen(false);
     setDetailDialogOpen(true);
+    
+    toast({
+      title: "Traiteur assigné",
+      description: `${selectedTraiteur.name} a été assigné à la demande ${selectedRequest.id}`,
+    });
   };
 
+  // Fonction pour ajouter un nouveau traiteur
   const handleAddTraiteur = () => {
     if (!newTraiteurName.trim()) return;
     
-    // In a real app, this would make an API call to add the traiteur to the database
-    console.log(`New traiteur added: ${newTraiteurName}`);
+    // Dans une application réelle, cela ferait un appel API pour ajouter le traiteur à la base de données
+    const newId = traiteurs.length + 1;
+    const newTraiteur = {
+      id: newId,
+      name: newTraiteurName,
+      available: true
+    };
     
-    // Close dialog and reset form
+    // Simule l'ajout du traiteur
+    // Dans une vraie application, on mettrait à jour l'état après confirmation de l'API
+    
+    toast({
+      title: "Traiteur ajouté",
+      description: `${newTraiteurName} a été ajouté à l'équipe`,
+    });
+    
+    // Ferme la boîte de dialogue et réinitialise le formulaire
     setNewTraiteurDialogOpen(false);
     setNewTraiteurName("");
+  };
+
+  // Fonction pour mettre à jour le statut d'une demande
+  const updateRequestStatus = (id: string, newStatus: string) => {
+    const statusColors: Record<string, string> = {
+      "Nouveau": "bg-blue-100 text-blue-800",
+      "En traitement": "bg-yellow-100 text-yellow-800",
+      "Visite programmée": "bg-purple-100 text-purple-800",
+      "Complété": "bg-green-100 text-green-800",
+      "Annulé": "bg-red-100 text-red-800",
+      "En attente d'infos client": "bg-orange-100 text-orange-800",
+    };
+    
+    const updatedRequests = requests.map(req => 
+      req.id === id 
+        ? { ...req, status: newStatus, statusColor: statusColors[newStatus] || "bg-gray-100 text-gray-800" } 
+        : req
+    );
+    
+    setRequests(updatedRequests);
+    
+    // Si la demande sélectionnée est celle dont on change le statut, mettre à jour également
+    if (selectedRequest && selectedRequest.id === id) {
+      setSelectedRequest({
+        ...selectedRequest,
+        status: newStatus,
+        statusColor: statusColors[newStatus] || "bg-gray-100 text-gray-800"
+      });
+    }
+    
+    toast({
+      title: "Statut mis à jour",
+      description: `La demande ${id} est maintenant "${newStatus}"`,
+    });
   };
 
   return (
@@ -248,7 +446,7 @@ const Requests = () => {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
             <Input
-              placeholder="Rechercher par client, référence ou adresse..."
+              placeholder="Rechercher par client, référence, email, téléphone ou adresse..."
               className="pl-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -257,7 +455,7 @@ const Requests = () => {
         </div>
         <div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Filtre par statut" />
             </SelectTrigger>
             <SelectContent>
@@ -266,18 +464,52 @@ const Requests = () => {
               <SelectItem value="en traitement">En traitement</SelectItem>
               <SelectItem value="visite programmée">Visite programmée</SelectItem>
               <SelectItem value="complété">Complété</SelectItem>
+              <SelectItem value="annulé">Annulé</SelectItem>
+              <SelectItem value="en attente d'infos client">En attente d'infos client</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div>
           <Select value={leadStatusFilter} onValueChange={setLeadStatusFilter}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Type de lead" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tous les leads</SelectItem>
               <SelectItem value="partiel">Leads partiels</SelectItem>
               <SelectItem value="complet">Leads complets</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <div>
+          <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Type de projet" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tous les types</SelectItem>
+              <SelectItem value="nouvelle construction">Nouvelle construction</SelectItem>
+              <SelectItem value="augmentation de puissance">Augmentation de puissance</SelectItem>
+              <SelectItem value="rénovation">Rénovation</SelectItem>
+              <SelectItem value="déplacement de compteur">Déplacement de compteur</SelectItem>
+              <SelectItem value="raccordement provisoire">Raccordement provisoire</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Select value={paymentStatusFilter} onValueChange={setPaymentStatusFilter}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Statut de paiement" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tous les paiements</SelectItem>
+              <SelectItem value="en attente">En attente</SelectItem>
+              <SelectItem value="payé">Payé</SelectItem>
+              <SelectItem value="échec">Échec</SelectItem>
+              <SelectItem value="remboursé">Remboursé</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -293,41 +525,58 @@ const Requests = () => {
         <CardContent>
           <div className="rounded-md border overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-enedis-gray-100">
-                  <tr className="text-left border-b">
-                    <th className="px-4 py-3 font-medium">Référence</th>
-                    <th className="px-4 py-3 font-medium">Client</th>
-                    <th className="px-4 py-3 font-medium hidden md:table-cell">Type de projet</th>
-                    <th className="px-4 py-3 font-medium hidden lg:table-cell">Adresse</th>
-                    <th className="px-4 py-3 font-medium hidden md:table-cell">Date</th>
-                    <th className="px-4 py-3 font-medium">Statut</th>
-                    <th className="px-4 py-3 font-medium">Lead</th>
-                    <th className="px-4 py-3 font-medium text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredRequests.map((request) => (
-                    <tr key={request.id} className="border-b hover:bg-gray-50">
-                      <td className="px-4 py-3 font-medium">{request.id}</td>
-                      <td className="px-4 py-3">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Référence</TableHead>
+                    <TableHead>Client</TableHead>
+                    <TableHead className="hidden md:table-cell">Type de projet</TableHead>
+                    <TableHead className="hidden lg:table-cell">Adresse</TableHead>
+                    <TableHead className="hidden md:table-cell">Date</TableHead>
+                    <TableHead>Statut</TableHead>
+                    <TableHead>Lead</TableHead>
+                    <TableHead>Paiement</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {currentItems.map((request) => (
+                    <TableRow key={request.id} className="hover:bg-gray-50">
+                      <TableCell className="font-medium">{request.id}</TableCell>
+                      <TableCell>
                         <div>{request.client}</div>
                         <div className="text-sm text-gray-500 hidden sm:block">{request.email}</div>
-                      </td>
-                      <td className="px-4 py-3 hidden md:table-cell">{request.projectType}</td>
-                      <td className="px-4 py-3 hidden lg:table-cell truncate max-w-xs">{request.address}</td>
-                      <td className="px-4 py-3 hidden md:table-cell">{request.date}</td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">{request.projectType}</TableCell>
+                      <TableCell className="hidden lg:table-cell truncate max-w-xs">{request.address}</TableCell>
+                      <TableCell className="hidden md:table-cell">{request.date}</TableCell>
+                      <TableCell>
                         <span className={`${request.statusColor} text-xs font-medium px-2 py-1 rounded-full`}>
                           {request.status}
                         </span>
-                      </td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell>
                         <Badge variant={request.leadStatus === "Partiel" ? "outline" : "default"}>
                           {request.leadStatus}
                         </Badge>
-                      </td>
-                      <td className="px-4 py-3 text-right">
+                      </TableCell>
+                      <TableCell>
+                        {request.paymentStatus && (
+                          <Badge 
+                            variant={request.paymentStatus === "Payé" ? "default" : "outline"}
+                            className={
+                              request.paymentStatus === "Échec" 
+                                ? "bg-red-100 text-red-800 hover:bg-red-200" 
+                                : request.paymentStatus === "Payé"
+                                ? "bg-green-100 text-green-800 hover:bg-green-200" 
+                                : ""
+                            }
+                          >
+                            {request.paymentStatus}
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-right">
                         <Button
                           variant="outline" 
                           size="sm"
@@ -338,15 +587,15 @@ const Requests = () => {
                         >
                           Détails
                         </Button>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
               
               {filteredRequests.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-12">
-                  <FileText className="h-12 w-12 text-gray-300" />
+                  <FileX className="h-12 w-12 text-gray-300" />
                   <h3 className="mt-2 text-lg font-medium text-gray-900">Aucune demande trouvée</h3>
                   <p className="mt-1 text-sm text-gray-500">
                     Aucune demande ne correspond à vos critères de recherche.
@@ -359,6 +608,7 @@ const Requests = () => {
                       setStatusFilter("all");
                       setTypeFilter("all");
                       setLeadStatusFilter("all");
+                      setPaymentStatusFilter("all");
                     }}
                   >
                     Réinitialiser les filtres
@@ -369,27 +619,50 @@ const Requests = () => {
           </div>
 
           {filteredRequests.length > 0 && (
-            <div className="mt-4 flex items-center justify-between">
-              <p className="text-sm text-gray-500">
-                Affichage de {filteredRequests.length} sur {requestsData.length} demandes
-              </p>
-              <div className="flex space-x-1">
-                <Button variant="outline" size="sm" disabled>
-                  Précédent
-                </Button>
-                <Button variant="outline" size="sm" className="bg-enedis-blue/10">
-                  1
-                </Button>
-                <Button variant="outline" size="sm">
-                  Suivant
-                </Button>
-              </div>
+            <div className="mt-4">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => goToPage(currentPage - 1)}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                    />
+                  </PaginationItem>
+                  
+                  {Array.from({ length: totalPages }).map((_, index) => {
+                    const page = index + 1;
+                    // Afficher uniquement les 5 premières pages
+                    if (page <= 3 || page === totalPages || page === currentPage) {
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationLink 
+                            isActive={currentPage === page}
+                            onClick={() => goToPage(page)}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    } else if (page === 4 && totalPages > 5) {
+                      return <PaginationItem key="ellipsis"><PaginationEllipsis /></PaginationItem>;
+                    }
+                    return null;
+                  })}
+                  
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={() => goToPage(currentPage + 1)}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Request Details Dialog */}
+      {/* Dialogue de détails de la demande */}
       {selectedRequest && (
         <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
           <DialogContent className="max-w-3xl">
@@ -401,15 +674,35 @@ const Requests = () => {
             </DialogHeader>
             <div className="grid gap-6 py-4">
               <div className="flex items-center justify-between">
-                <Badge 
-                  variant="secondary" 
-                  className={selectedRequest.statusColor.replace('bg-', '').replace('text-', '')}
-                >
-                  {selectedRequest.status}
-                </Badge>
-                <Badge variant={selectedRequest.leadStatus === "Partiel" ? "outline" : "default"}>
-                  Lead {selectedRequest.leadStatus}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Badge 
+                    variant="secondary" 
+                    className={selectedRequest.statusColor.replace('bg-', '').replace('text-', '')}
+                  >
+                    {selectedRequest.status}
+                  </Badge>
+                  <Badge variant={selectedRequest.leadStatus === "Partiel" ? "outline" : "default"}>
+                    Lead {selectedRequest.leadStatus}
+                  </Badge>
+                </div>
+                {isAdmin && (
+                  <Select 
+                    onValueChange={(value) => updateRequestStatus(selectedRequest.id, value)}
+                    defaultValue={selectedRequest.status}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Changer le statut" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Nouveau">Nouveau</SelectItem>
+                      <SelectItem value="En traitement">En traitement</SelectItem>
+                      <SelectItem value="Visite programmée">Visite programmée</SelectItem>
+                      <SelectItem value="Complété">Complété</SelectItem>
+                      <SelectItem value="Annulé">Annulé</SelectItem>
+                      <SelectItem value="En attente d'infos client">En attente d'infos client</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -432,6 +725,12 @@ const Requests = () => {
                       <MapPin className="h-4 w-4 text-gray-500 mt-1" />
                       <span>{selectedRequest.address}</span>
                     </div>
+                    {selectedRequest.prm && (
+                      <div className="flex gap-2 items-center">
+                        <FileText className="h-4 w-4 text-gray-500" />
+                        <span>PRM/PDL: {selectedRequest.prm}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -454,8 +753,87 @@ const Requests = () => {
                       <p className="font-medium">Assigné à</p>
                       <p>{selectedRequest.assignedTo?.name || "Non assigné"}</p>
                     </div>
+                    {selectedRequest.service && (
+                      <div className="text-sm col-span-2">
+                        <p className="font-medium">Service demandé</p>
+                        <p>{selectedRequest.service} - {selectedRequest.price}</p>
+                      </div>
+                    )}
                   </div>
+                  
+                  {selectedRequest.description && (
+                    <div className="mt-4 text-sm">
+                      <p className="font-medium">Description</p>
+                      <p className="mt-1 text-gray-700">{selectedRequest.description}</p>
+                    </div>
+                  )}
                 </div>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Documents */}
+                {selectedRequest.documents && selectedRequest.documents.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-medium mb-3">Documents</h3>
+                    <div className="space-y-2">
+                      {selectedRequest.documents.map((doc, index) => (
+                        <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded-md">
+                          <FileText className="h-4 w-4 text-gray-500" />
+                          <span className="text-sm">{doc}</span>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="ml-auto"
+                            onClick={() => {
+                              // Dans une application réelle, ceci déclencherait un téléchargement
+                              console.log(`Téléchargement de ${doc}`);
+                            }}
+                          >
+                            Télécharger
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Informations de paiement */}
+                {selectedRequest.paymentStatus && (
+                  <div>
+                    <h3 className="text-lg font-medium mb-3">Informations de paiement</h3>
+                    <div className="p-4 bg-gray-50 rounded-md">
+                      <div className="grid gap-2">
+                        <div className="flex justify-between">
+                          <span className="text-sm font-medium">Statut:</span>
+                          <Badge 
+                            variant={selectedRequest.paymentStatus === "Payé" ? "default" : "outline"}
+                            className={
+                              selectedRequest.paymentStatus === "Échec" 
+                                ? "bg-red-100 text-red-800" 
+                                : selectedRequest.paymentStatus === "Payé"
+                                ? "bg-green-100 text-green-800" 
+                                : ""
+                            }
+                          >
+                            {selectedRequest.paymentStatus}
+                          </Badge>
+                        </div>
+                        {selectedRequest.paymentRef && (
+                          <div className="flex justify-between">
+                            <span className="text-sm font-medium">Référence:</span>
+                            <span className="text-sm">{selectedRequest.paymentRef}</span>
+                          </div>
+                        )}
+                        {selectedRequest.price && (
+                          <div className="flex justify-between">
+                            <span className="text-sm font-medium">Montant:</span>
+                            <span className="text-sm font-semibold">{selectedRequest.price}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="border-t pt-4">
@@ -501,7 +879,7 @@ const Requests = () => {
         </Dialog>
       )}
 
-      {/* Assign Traiteur Dialog */}
+      {/* Dialogue d'assignation de traiteur */}
       {selectedRequest && (
         <Dialog open={assignDialogOpen} onOpenChange={setAssignDialogOpen}>
           <DialogContent>
@@ -557,19 +935,19 @@ const Requests = () => {
               </div>
             </div>
             
-            <div className="flex justify-end space-x-2">
+            <DialogFooter>
               <Button variant="outline" onClick={() => {
                 setAssignDialogOpen(false);
                 setDetailDialogOpen(true);
               }}>
                 Annuler
               </Button>
-            </div>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       )}
 
-      {/* Add New Traiteur Dialog */}
+      {/* Dialogue d'ajout de traiteur */}
       {isAdmin && (
         <Dialog open={newTraiteurDialogOpen} onOpenChange={setNewTraiteurDialogOpen}>
           <DialogContent>
@@ -593,14 +971,14 @@ const Requests = () => {
               </div>
             </div>
             
-            <div className="flex justify-end space-x-2">
+            <DialogFooter>
               <Button variant="outline" onClick={() => setNewTraiteurDialogOpen(false)}>
                 Annuler
               </Button>
               <Button onClick={handleAddTraiteur}>
                 Ajouter
               </Button>
-            </div>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       )}

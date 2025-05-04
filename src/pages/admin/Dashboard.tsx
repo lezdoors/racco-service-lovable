@@ -1,11 +1,172 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, CalendarCheck, Clock, FileText, ListChecks, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Link } from "react-router-dom";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+// Type de données pour les statistiques
+interface StatCardProps {
+  title: string;
+  value: string;
+  description: string;
+  icon: React.ReactNode;
+}
+
+// Type de données pour les techniciens
+interface TechnicianProps {
+  name: string;
+  initials: string;
+  role: string;
+  status: string;
+  color: string;
+  availability: string;
+  availabilityColor: string;
+  demandes: number;
+}
+
+// Type de données pour les demandes récentes
+interface RecentRequestProps {
+  ref: string;
+  client: string;
+  type: string;
+  date: string;
+  status: string;
+  statusColor: string;
+}
+
+const StatCard = ({ title, value, description, icon }: StatCardProps) => (
+  <Card>
+    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardTitle className="text-sm font-medium">{title}</CardTitle>
+      {icon}
+    </CardHeader>
+    <CardContent>
+      <div className="text-2xl font-bold">{value}</div>
+      <p className="text-xs text-muted-foreground">{description}</p>
+    </CardContent>
+  </Card>
+);
 
 const Dashboard = () => {
   const isMobile = useIsMobile();
+
+  // Données pour les statistiques
+  const statCards: StatCardProps[] = [
+    {
+      title: "Demandes totales",
+      value: "156",
+      description: "+12% par rapport au mois précédent",
+      icon: <FileText className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+      title: "Demandes en attente",
+      value: "24",
+      description: "+2 nouvelles demandes aujourd'hui",
+      icon: <Clock className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+      title: "Visites programmées",
+      value: "8",
+      description: "Cette semaine",
+      icon: <CalendarCheck className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+      title: "Demandes traitées",
+      value: "132",
+      description: "85% de toutes les demandes",
+      icon: <ListChecks className="h-4 w-4 text-muted-foreground" />,
+    },
+  ];
+
+  // Données pour les techniciens
+  const technicians: TechnicianProps[] = [
+    {
+      name: "Jean Martin",
+      initials: "JM",
+      role: "Technicien senior",
+      status: "Disponible",
+      color: "bg-enedis-blue",
+      availability: "Disponible aujourd'hui",
+      availabilityColor: "text-green-600",
+      demandes: 8,
+    },
+    {
+      name: "Sophie Dubois",
+      initials: "SD",
+      role: "Technicienne",
+      status: "Sur le terrain",
+      color: "bg-enedis-green",
+      availability: "Disponible demain",
+      availabilityColor: "text-blue-600",
+      demandes: 6,
+    },
+    {
+      name: "Pierre Lefèvre",
+      initials: "PL",
+      role: "Technicien",
+      status: "Sur le terrain",
+      color: "bg-yellow-500",
+      availability: "Disponible demain",
+      availabilityColor: "text-blue-600",
+      demandes: 5,
+    },
+    {
+      name: "Claire Moreau",
+      initials: "CM",
+      role: "Technicienne",
+      status: "En congé",
+      color: "bg-purple-500",
+      availability: "Disponible lundi",
+      availabilityColor: "text-orange-600",
+      demandes: 4,
+    },
+  ];
+
+  // Données pour les demandes récentes
+  const recentRequests: RecentRequestProps[] = [
+    {
+      ref: "REC-2023-4526",
+      client: "Martin Dupont",
+      type: "Nouvelle construction",
+      date: "22/04/2025",
+      status: "Nouveau",
+      statusColor: "bg-blue-100 text-blue-800",
+    },
+    {
+      ref: "REC-2023-4525",
+      client: "Société ABC",
+      type: "Augmentation de puissance",
+      date: "21/04/2025",
+      status: "En traitement",
+      statusColor: "bg-yellow-100 text-yellow-800",
+    },
+    {
+      ref: "REC-2023-4522",
+      client: "Marie Lambert",
+      type: "Rénovation",
+      date: "20/04/2025",
+      status: "Visite programmée",
+      statusColor: "bg-purple-100 text-purple-800",
+    },
+    {
+      ref: "REC-2023-4518",
+      client: "Jean Michel",
+      type: "Nouvelle construction",
+      date: "18/04/2025",
+      status: "Complété",
+      statusColor: "bg-green-100 text-green-800",
+    },
+  ];
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -23,46 +184,15 @@ const Dashboard = () => {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Demandes totales</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">156</div>
-            <p className="text-xs text-muted-foreground">+12% par rapport au mois précédent</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Demandes en attente</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">24</div>
-            <p className="text-xs text-muted-foreground">+2 nouvelles demandes aujourd'hui</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Visites programmées</CardTitle>
-            <CalendarCheck className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground">Cette semaine</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Demandes traitées</CardTitle>
-            <ListChecks className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">132</div>
-            <p className="text-xs text-muted-foreground">85% de toutes les demandes</p>
-          </CardContent>
-        </Card>
+        {statCards.map((card, index) => (
+          <StatCard
+            key={index}
+            title={card.title}
+            value={card.value}
+            description={card.description}
+            icon={card.icon}
+          />
+        ))}
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
@@ -77,8 +207,14 @@ const Dashboard = () => {
                 <p className="text-sm text-muted-foreground">
                   Statistiques des demandes par type de projet
                 </p>
-                <Button variant="outline" className="mt-4">
-                  Voir les statistiques détaillées
+                <Button 
+                  variant="outline" 
+                  className="mt-4"
+                  asChild
+                >
+                  <Link to="/admin/requests">
+                    Voir toutes les demandes
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -90,54 +226,20 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center">
-                    <div className="h-8 w-8 rounded-full bg-enedis-blue mr-2 flex items-center justify-center text-xs text-white">
-                      JM
+              {technicians.map((tech, index) => (
+                <div key={index} className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center">
+                      <div className={`h-8 w-8 rounded-full ${tech.color} mr-2 flex items-center justify-center text-xs text-white`}>
+                        {tech.initials}
+                      </div>
+                      <span>{tech.name}</span>
                     </div>
-                    <span>Jean Martin</span>
+                    <span className="text-muted-foreground">{tech.demandes} demandes</span>
                   </div>
-                  <span className="text-muted-foreground">8 demandes</span>
+                  <Progress value={tech.demandes * 10} className="h-2" />
                 </div>
-                <Progress value={80} className="h-2" />
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center">
-                    <div className="h-8 w-8 rounded-full bg-enedis-green mr-2 flex items-center justify-center text-xs text-white">
-                      SD
-                    </div>
-                    <span>Sophie Dubois</span>
-                  </div>
-                  <span className="text-muted-foreground">6 demandes</span>
-                </div>
-                <Progress value={60} className="h-2" />
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center">
-                    <div className="h-8 w-8 rounded-full bg-yellow-500 mr-2 flex items-center justify-center text-xs text-white">
-                      PL
-                    </div>
-                    <span>Pierre Lefèvre</span>
-                  </div>
-                  <span className="text-muted-foreground">5 demandes</span>
-                </div>
-                <Progress value={50} className="h-2" />
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center">
-                    <div className="h-8 w-8 rounded-full bg-purple-500 mr-2 flex items-center justify-center text-xs text-white">
-                      CM
-                    </div>
-                    <span>Claire Moreau</span>
-                  </div>
-                  <span className="text-muted-foreground">4 demandes</span>
-                </div>
-                <Progress value={40} className="h-2" />
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -147,74 +249,41 @@ const Dashboard = () => {
         <Card className="col-span-3 lg:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Demandes récentes</CardTitle>
-            <Button variant="outline" size="sm">
-              Voir toutes
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/admin/requests">Voir toutes</Link>
             </Button>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="border-b bg-enedis-gray-100">
-                    <th className="px-4 py-2 text-left text-sm font-medium">Référence</th>
-                    <th className="px-4 py-2 text-left text-sm font-medium">Client</th>
-                    <th className="px-4 py-2 text-left text-sm font-medium">Type</th>
-                    <th className="px-4 py-2 text-left text-sm font-medium">Date</th>
-                    <th className="px-4 py-2 text-left text-sm font-medium">Statut</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    {
-                      ref: "REC-2023-4526",
-                      client: "Martin Dupont",
-                      type: "Nouvelle construction",
-                      date: "22/04/2025",
-                      status: "Nouveau",
-                      statusColor: "bg-blue-100 text-blue-800",
-                    },
-                    {
-                      ref: "REC-2023-4525",
-                      client: "Société ABC",
-                      type: "Augmentation de puissance",
-                      date: "21/04/2025",
-                      status: "En traitement",
-                      statusColor: "bg-yellow-100 text-yellow-800",
-                    },
-                    {
-                      ref: "REC-2023-4522",
-                      client: "Marie Lambert",
-                      type: "Rénovation",
-                      date: "20/04/2025",
-                      status: "Visite programmée",
-                      statusColor: "bg-purple-100 text-purple-800",
-                    },
-                    {
-                      ref: "REC-2023-4518",
-                      client: "Jean Michel",
-                      type: "Nouvelle construction",
-                      date: "18/04/2025",
-                      status: "Complété",
-                      statusColor: "bg-green-100 text-green-800",
-                    },
-                  ].map((item, index) => (
-                    <tr
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Référence</TableHead>
+                    <TableHead>Client</TableHead>
+                    <TableHead className="hidden md:table-cell">Type</TableHead>
+                    <TableHead className="hidden md:table-cell">Date</TableHead>
+                    <TableHead>Statut</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {recentRequests.map((item, index) => (
+                    <TableRow
                       key={index}
-                      className="border-b hover:bg-gray-50"
+                      className="hover:bg-gray-50"
                     >
-                      <td className="px-4 py-3 text-sm">{item.ref}</td>
-                      <td className="px-4 py-3 text-sm">{item.client}</td>
-                      <td className="px-4 py-3 text-sm">{item.type}</td>
-                      <td className="px-4 py-3 text-sm">{item.date}</td>
-                      <td className="px-4 py-3 text-sm">
+                      <TableCell className="font-medium">{item.ref}</TableCell>
+                      <TableCell>{item.client}</TableCell>
+                      <TableCell className="hidden md:table-cell">{item.type}</TableCell>
+                      <TableCell className="hidden md:table-cell">{item.date}</TableCell>
+                      <TableCell>
                         <span className={`${item.statusColor} px-2 py-1 rounded-full text-xs font-medium`}>
                           {item.status}
                         </span>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           </CardContent>
         </Card>
@@ -224,35 +293,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[
-                {
-                  name: "Jean Martin",
-                  initials: "JM",
-                  role: "Technicien senior",
-                  status: "Disponible",
-                  color: "bg-enedis-blue",
-                  availability: "Disponible aujourd'hui",
-                  availabilityColor: "text-green-600",
-                },
-                {
-                  name: "Sophie Dubois",
-                  initials: "SD",
-                  role: "Technicienne",
-                  status: "Sur le terrain",
-                  color: "bg-enedis-green",
-                  availability: "Disponible demain",
-                  availabilityColor: "text-blue-600",
-                },
-                {
-                  name: "Pierre Lefèvre",
-                  initials: "PL",
-                  role: "Technicien",
-                  status: "Sur le terrain",
-                  color: "bg-yellow-500",
-                  availability: "Disponible demain",
-                  availabilityColor: "text-blue-600",
-                },
-              ].map((tech, i) => (
+              {technicians.slice(0, 3).map((tech, i) => (
                 <div key={i} className="flex items-start space-x-3">
                   <div className={`${tech.color} h-10 w-10 rounded-full flex items-center justify-center text-white`}>
                     {tech.initials}
@@ -268,9 +309,11 @@ const Dashboard = () => {
               ))}
             </div>
             <div className="mt-4 pt-4 border-t">
-              <Button variant="outline" size="sm" className="w-full">
-                <Users className="h-4 w-4 mr-2" />
-                Gérer les techniciens
+              <Button variant="outline" size="sm" className="w-full" asChild>
+                <Link to="/admin/technicians">
+                  <Users className="h-4 w-4 mr-2" />
+                  Gérer les techniciens
+                </Link>
               </Button>
             </div>
           </CardContent>

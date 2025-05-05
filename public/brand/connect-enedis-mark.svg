@@ -1,14 +1,24 @@
 
 <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-  {/* Icon-only version for favicon/mobile */}
-  <path d="M20 40V25L30 15L40 25V40H35V30H25V40H20Z" fill="#0063AF"/>
-  <path d="M27 35H33V38H27V35Z" fill="#94C11F"/>
-  <path d="M27 31H33V34H27V31Z" fill="#94C11F"/>
-  <path d="M45 30C48 30 50 28 53 28" stroke="url(#flow-gradient)" strokeWidth="3" strokeLinecap="round"/>
+  <!-- Cleaner house icon with plug elements -->
+  <path d="M18 42V25L30 14L42 25V42H36V30H24V42H18Z" fill="#0063AF"/>
+  
+  <!-- Connection points (outlets) with rounded corners -->
+  <rect x="26" y="32" width="8" height="4" rx="1.5" fill="#94C11F"/>
+  <rect x="26" y="37" width="8" height="4" rx="1.5" fill="#94C11F"/>
+  
+  <!-- Circular power indicator -->
+  <circle cx="30" cy="22" r="2.5" fill="#94C11F" opacity="0.8"/>
+  
+  <!-- Dynamic flowing wire -->
+  <path d="M45 32C48 32 50 30 53 30" stroke="url(#flow-gradient)" strokeWidth="3" strokeLinecap="round"/>
+  
+  <!-- Gradient definition -->
   <defs>
     <linearGradient id="flow-gradient" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stopColor="#0063AF"/>
-      <stop offset="100%" stopColor="#94C11F"/>
+      <stop offset="0%" stop-color="#0063AF"/>
+      <stop offset="50%" stop-color="#5DA8E0"/>
+      <stop offset="100%" stop-color="#94C11F"/>
     </linearGradient>
   </defs>
 </svg>

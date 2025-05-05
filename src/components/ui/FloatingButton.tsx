@@ -13,7 +13,7 @@ interface FloatingButtonProps {
 const FloatingButton = ({ className, href }: FloatingButtonProps) => {
   return (
     <div className={cn(
-      "fixed bottom-6 right-6 z-50", 
+      "fixed bottom-6 md:bottom-8 right-1/2 transform translate-x-1/2 md:right-6 md:translate-x-0 z-50", 
       className
     )}>
       <Button

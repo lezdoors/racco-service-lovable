@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import LogoAnimation from "@/components/brand/LogoAnimation";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,14 +32,12 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
-            <img
-              src="/logo-enedis.svg"
-              alt="Connect Enedis"
-              className="h-8 md:h-10"
-            />
-            <span className={`ml-2 font-bold text-lg ${isScrolled ? "text-enedis-gray-800" : "text-white"}`}>
-              Connect Enedis
-            </span>
+            <div className="h-10 w-auto">
+              <LogoAnimation 
+                variant={isScrolled ? "full" : "white"} 
+                className="h-10" 
+              />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

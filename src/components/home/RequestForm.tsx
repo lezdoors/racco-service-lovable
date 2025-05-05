@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Check } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import MultiStepForm from "@/components/forms/MultiStepForm";
 
 const RequestForm = () => {
@@ -15,25 +15,45 @@ const RequestForm = () => {
           <div className="french-divider my-6"></div>
           <p className="text-france-navy max-w-2xl mx-auto">
             Complétez le formulaire ci-dessous pour effectuer votre demande de raccordement
-            électrique. Notre équipe reste disponible durant toute la durée du processus de demande.
+            électrique. Notre équipe d'experts prendra en charge votre dossier dans les 24h.
           </p>
-          <div className="flex justify-center my-6 space-x-4">
-            <div className="flex items-center">
-              <div className="p-1 bg-france-navy rounded-full mr-2">
+          
+          <div className="mt-8 flex flex-wrap justify-center gap-4 max-w-3xl mx-auto">
+            <div className="flex-1 min-w-[240px] bg-france-offWhite rounded-lg p-4 flex items-start">
+              <div className="p-1 bg-france-navy rounded-full mr-3 mt-0.5">
                 <Check className="w-4 h-4 text-white" />
               </div>
-              <span className="text-sm">Conforme à la norme NF C 15-100</span>
+              <div className="text-left">
+                <h3 className="font-medium text-sm mb-1">Conforme à la norme NF C 15-100</h3>
+                <p className="text-xs text-gray-600">Votre installation respectera toutes les normes en vigueur</p>
+              </div>
             </div>
-            <div className="flex items-center">
-              <div className="p-1 bg-france-navy rounded-full mr-2">
+            
+            <div className="flex-1 min-w-[240px] bg-france-offWhite rounded-lg p-4 flex items-start">
+              <div className="p-1 bg-france-navy rounded-full mr-3 mt-0.5">
                 <Check className="w-4 h-4 text-white" />
               </div>
-              <span className="text-sm">Certifié CONSUEL</span>
+              <div className="text-left">
+                <h3 className="font-medium text-sm mb-1">Certifié CONSUEL</h3>
+                <p className="text-xs text-gray-600">Attestation de conformité garantie pour votre installation</p>
+              </div>
+            </div>
+            
+            <div className="flex-1 min-w-[240px] bg-france-offWhite rounded-lg p-4 flex items-start">
+              <div className="p-1 bg-france-navy rounded-full mr-3 mt-0.5">
+                <Check className="w-4 h-4 text-white" />
+              </div>
+              <div className="text-left">
+                <h3 className="font-medium text-sm mb-1">Accompagnement personnalisé</h3>
+                <p className="text-xs text-gray-600">Un expert dédié pour suivre votre dossier de A à Z</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <MultiStepForm />
+        <div className="bg-white rounded-xl shadow-xl p-6 md:p-8 max-w-4xl mx-auto">
+          <MultiStepForm />
+        </div>
       </div>
     </section>
   );

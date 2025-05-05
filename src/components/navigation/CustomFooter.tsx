@@ -8,7 +8,13 @@ const CustomFooter = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-bold mb-4">Connect Enedis</h3>
+            <div className="mb-6">
+              <img 
+                src="/brand/sre-logo-white.svg" 
+                alt="Service Raccordement Electricité"
+                className="h-16 w-auto"
+              />
+            </div>
             <p className="mb-4 text-sm">
               Facilitateur de raccordement Enedis. Service professionnel pour tous vos besoins de raccordement électrique.
             </p>
@@ -45,7 +51,7 @@ const CustomFooter = () => {
         </div>
         
         <div className="mt-8 pt-8 border-t border-enedis-gray-700 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Connect Enedis. Tous droits réservés.</p>
+          <p>&copy; {new Date().getFullYear()} Service Raccordement Electricité. Tous droits réservés.</p>
         </div>
       </div>
     </footer>

@@ -1,13 +1,13 @@
 
-<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <!-- House shape -->
-  <path d="M45 10 L85 40 V85 H5 V40 L45 10 Z" fill="#3f51b5"/>
+  <path d="M50 10 L90 40 V90 H10 V40 L50 10 Z" fill="#3f51b5"/>
   <!-- Roof in white -->
-  <path d="M45 10 L85 40 L45 40 L5 40 L45 10 Z" fill="#ffffff"/>
+  <path d="M50 10 L90 40 L50 40 L10 40 L50 10 Z" fill="#ffffff"/>
   <!-- Door -->
-  <rect x="40" y="65" width="10" height="20" fill="#1a237e"/>
+  <rect x="45" y="70" width="10" height="20" fill="#1a237e"/>
   <!-- Connection line -->
-  <path d="M0 50 H35" stroke="#66bb6a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M0 50 H40" stroke="#66bb6a" stroke-width="5" stroke-linecap="round"/>
   <!-- Connection point -->
-  <circle cx="35" cy="50" r="6" fill="#66bb6a"/>
+  <circle cx="40" cy="50" r="6" fill="#66bb6a"/>
 </svg>

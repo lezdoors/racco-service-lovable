@@ -31,65 +31,19 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
-            <div className="h-14 w-auto">
+            <div className="h-16 w-auto">
               {isScrolled ? (
-                <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" className="h-full w-auto">
-                  {/* House shape */}
-                  <path d="M50 10 L90 40 V90 H10 V40 L50 10 Z" fill="#3f51b5"/>
-                  {/* Roof in white */}
-                  <path d="M50 10 L90 40 L50 40 L10 40 L50 10 Z" fill="#ffffff"/>
-                  {/* Door */}
-                  <rect x="45" y="70" width="10" height="20" fill="#1a237e"/>
-                  {/* Connection line */}
-                  <path d="M0 50 H40" stroke="#66bb6a" strokeWidth="5" strokeLinecap="round"/>
-                  {/* Connection point */}
-                  <circle cx="40" cy="50" r="6" fill="#66bb6a"/>
-                  
-                  {/* Logo text */}
-                  <g transform="translate(105, 25)">
-                    {/* First text block */}
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="14" fontWeight="600" fill="#1a237e" y="0">Service</text>
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="14" fontWeight="600" fill="#1a237e" y="18">Raccordement</text>
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="14" fontWeight="600" fill="#1a237e" y="36">Electricité</text>
-                    
-                    {/* Separator line */}
-                    <line x1="110" y1="0" x2="110" y2="45" stroke="#cccccc" strokeWidth="2"/>
-                    
-                    {/* Second text block */}
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="12" fontWeight="400" fill="#3949ab" x="120" y="0">Votre partenaire</text>
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="12" fontWeight="400" fill="#3949ab" x="120" y="18">raccordement au réseau</text>
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="12" fontWeight="400" fill="#3949ab" x="120" y="36">d'électricité d'Enedis</text>
-                  </g>
-                </svg>
+                <img 
+                  src="/brand/sre-connect-logo.svg" 
+                  alt="Service Raccordement Electricité" 
+                  className="h-full w-auto"
+                />
               ) : (
-                <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" className="h-full w-auto">
-                  {/* House shape */}
-                  <path d="M50 10 L90 40 V90 H10 V40 L50 10 Z" fill="white" opacity="0.9"/>
-                  {/* Roof in contrasting color */}
-                  <path d="M50 10 L90 40 L50 40 L10 40 L50 10 Z" fill="#ffffff" opacity="0.7"/>
-                  {/* Door */}
-                  <rect x="45" y="70" width="10" height="20" fill="white"/>
-                  {/* Connection line */}
-                  <path d="M0 50 H40" stroke="white" strokeWidth="5" strokeLinecap="round"/>
-                  {/* Connection point */}
-                  <circle cx="40" cy="50" r="6" fill="white"/>
-                  
-                  {/* Logo text */}
-                  <g transform="translate(105, 25)">
-                    {/* First text block */}
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="14" fontWeight="600" fill="white" y="0">Service</text>
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="14" fontWeight="600" fill="white" y="18">Raccordement</text>
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="14" fontWeight="600" fill="white" y="36">Electricité</text>
-                    
-                    {/* Separator line */}
-                    <line x1="110" y1="0" x2="110" y2="45" stroke="white" strokeWidth="2" opacity="0.7"/>
-                    
-                    {/* Second text block */}
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="12" fontWeight="400" fill="white" x="120" y="0">Votre partenaire</text>
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="12" fontWeight="400" fill="white" x="120" y="18">raccordement au réseau</text>
-                    <text fontFamily="'Montserrat', sans-serif" fontSize="12" fontWeight="400" fill="white" x="120" y="36">d'électricité d'Enedis</text>
-                  </g>
-                </svg>
+                <img 
+                  src="/brand/sre-connect-logo-white.svg" 
+                  alt="Service Raccordement Electricité" 
+                  className="h-full w-auto"
+                />
               )}
             </div>
           </Link>

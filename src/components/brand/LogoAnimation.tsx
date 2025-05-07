@@ -27,22 +27,27 @@ const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
         const svgDoc = objectRef.current?.contentDocument;
         if (!svgDoc) return;
 
-        // Find and animate the flowing line path inside the SVG document
-        const flowLine = svgDoc.querySelector('path[stroke*="url(#flow-gradient)"]');
-        if (flowLine) {
-          flowLine.classList.add('animate-pulse');
+        // Find and animate elements in the SVG
+        const lightBulb = svgDoc.querySelector('ellipse[fill="#FFF9C4"]');
+        if (lightBulb) {
+          lightBulb.classList.add('animate-pulse');
         }
+        
+        const electricRays = svgDoc.querySelectorAll('path[stroke="#FFD600"], path[stroke="white"]');
+        electricRays.forEach(ray => {
+          ray.classList.add('animate-pulse');
+        });
       } catch (error) {
         console.error("Error accessing SVG content:", error);
       }
     };
   }, [animate]);
 
-  const logoPath = `/brand/connect-enedis-${
-    variant === 'full' ? 'logo' :
-    variant === 'mono' ? 'logo-mono' :
-    variant === 'white' ? 'logo-white' :
-    'mark'
+  const logoPath = `/brand/${
+    variant === 'full' ? 'sre-connect-logo' :
+    variant === 'mono' ? 'sre-connect-logo' :
+    variant === 'white' ? 'sre-connect-logo-white' :
+    'sre-connect-mark'
   }.svg`;
 
   // Improved handling for click events 
@@ -69,7 +74,7 @@ const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
-      aria-label="Logo Connect Enedis"
+      aria-label="Logo Raccordement Connect"
     >
       <object
         ref={objectRef}

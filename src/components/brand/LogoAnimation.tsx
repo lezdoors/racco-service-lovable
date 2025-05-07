@@ -86,11 +86,11 @@ const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
     }
   };
 
-  // Create a div wrapper that can receive clicks
+  // Create a div wrapper that can receive clicks with proper sizing
   return (
     <div 
       ref={ref || containerRef}
-      className={`${className} cursor-pointer relative`}
+      className={`${className} cursor-pointer relative inline-flex`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       role="button"
@@ -101,12 +101,12 @@ const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
         ref={objectRef}
         data={logoPath}
         type="image/svg+xml"
-        className="w-auto h-full pointer-events-none"
+        className="w-full h-full"
         aria-hidden="true"
       />
-      {/* Invisible overlay to ensure clicks work everywhere on the logo */}
+      {/* Fixed overlay that matches SVG dimensions */}
       <div 
-        className="absolute inset-0" 
+        className="absolute top-0 left-0 w-full h-full"
         aria-hidden="true"
       />
     </div>

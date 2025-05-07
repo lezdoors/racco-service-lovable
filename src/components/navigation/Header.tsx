@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -31,10 +32,10 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
-            <div className="h-16 w-auto">
+            <div className="h-12 w-auto">
               <LogoAnimation 
                 variant={isScrolled ? "full" : "white"} 
-                className="h-full w-auto transition-all duration-300"
+                className="h-12"
                 animate={true}
               />
             </div>

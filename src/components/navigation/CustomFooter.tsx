@@ -8,10 +8,10 @@ const CustomFooter = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <div className="mb-6">
+            <div className="mb-6 w-48">
               <LogoAnimation 
                 variant="white" 
-                className="h-24 w-auto" 
+                className="w-full h-auto" 
                 animate={false}
               />
             </div>

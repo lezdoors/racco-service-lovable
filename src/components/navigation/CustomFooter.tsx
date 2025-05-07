@@ -1,18 +1,12 @@
-
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin } from "lucide-react";
-
 const CustomFooter = () => {
   return <footer className="bg-enedis-gray-800 text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="mb-6">
-              <img 
-                src="/brand/sre-connect-logo-white.svg" 
-                alt="Service Raccordement Electricité" 
-                className="h-24 w-auto"
-              />
+              <img src="/brand/sre-connect-logo-white.svg" alt="Service Raccordement Electricité" className="h-24 w-auto" />
             </div>
             <p className="mb-4 text-sm">
               Facilitateur de raccordement Enedis. Service professionnel pour tous vos besoins de raccordement électrique.
@@ -35,7 +29,7 @@ const CustomFooter = () => {
             <ul className="space-y-2 text-sm">
               <li className="flex items-center">
                 <Phone className="w-4 h-4 mr-2" />
-                <span>+33 9 70 83 19 70</span>
+                <span>09 70 70 95 70</span>
               </li>
               <li className="flex items-center">
                 <Mail className="w-4 h-4 mr-2" />

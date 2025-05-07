@@ -1,17 +1,17 @@
 
 <svg width="240" height="60" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- House icon with plug elements -->
+  <!-- House icon with plug elements - white -->
   <path d="M20 40V25L30 15L40 25V40H35V30H25V40H20Z" fill="white"/>
   
-  <!-- Connection points (outlets) -->
-  <rect x="27" y="31" width="6" height="3" rx="1" fill="white" opacity="0.9"/>
-  <rect x="27" y="35" width="6" height="3" rx="1" fill="white" opacity="0.9"/>
+  <!-- Connection points (outlets) - enhanced white -->
+  <rect x="27" y="31" width="6" height="3" rx="1" fill="white" opacity="0.95"/>
+  <rect x="27" y="35" width="6" height="3" rx="1" fill="white" opacity="0.95"/>
   
-  <!-- Dynamic flowing wire -->
+  <!-- Dynamic flowing wire - enhanced white -->
   <path d="M45 30C50 30 55 25 65 25C75 25 80 35 90 35" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
   
   <!-- Small power grid pattern -->
-  <path opacity="0.1" d="M88 15h20v20h-20z" stroke="white" strokeWidth="0.5" strokeDasharray="2 2"/>
+  <path opacity="0.2" d="M88 15h20v20h-20z" stroke="white" strokeWidth="0.5" strokeDasharray="2 2"/>
   
   <!-- Text styling with custom font -->
   <text x="100" y="35" 
@@ -29,4 +29,15 @@
         fill="white">
     Enedis
   </text>
+  
+  <!-- Added subtle energy glow -->
+  <circle cx="30" cy="22" r="2" fill="white" opacity="0.8" filter="url(#glow)"/>
+  
+  <!-- Glow filter -->
+  <defs>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
 </svg>

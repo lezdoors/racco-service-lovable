@@ -28,7 +28,7 @@ const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
         if (!svgDoc) return;
 
         // Find and animate elements in the SVG
-        const wirePath = svgDoc.querySelector('path[stroke="url(#flow-gradient)"], path[stroke="#0063AF"], path[stroke="white"]');
+        const wirePath = svgDoc.querySelector('path[stroke="url(#flow-gradient)"], path[stroke="#1EAEDB"], path[stroke="white"]');
         if (wirePath) {
           // Add a pulsing animation to the wire
           wirePath.setAttribute('stroke-dasharray', '4,2');
@@ -43,20 +43,31 @@ const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
           const animation = document.createElementNS("http://www.w3.org/2000/svg", "animate");
           animation.setAttribute('attributeName', 'opacity');
           animation.setAttribute('values', '0.8;0.4;0.8');
-          animation.setAttribute('dur', '2s');
+          animation.setAttribute('dur', '1.5s');
           animation.setAttribute('repeatCount', 'indefinite');
           el.appendChild(animation);
         });
         
-        // Animate power outlets
-        const outlets = svgDoc.querySelectorAll('rect[fill="#94C11F"], rect[fill="white"]');
+        // Animate power outlets - updated with more vibrant glow
+        const outlets = svgDoc.querySelectorAll('rect[fill="#50C878"], rect[fill="white"]');
         outlets.forEach((outlet, index) => {
           const animation = document.createElementNS("http://www.w3.org/2000/svg", "animate");
           animation.setAttribute('attributeName', 'opacity');
           animation.setAttribute('values', '1;0.7;1');
-          animation.setAttribute('dur', `${1.5 + index * 0.5}s`);
+          animation.setAttribute('dur', `${1.2 + index * 0.4}s`);
           animation.setAttribute('repeatCount', 'indefinite');
           outlet.appendChild(animation);
+        });
+        
+        // Animate energy indicators - new effect
+        const energyIndicators = svgDoc.querySelectorAll('circle[fill="#FFD600"], circle[fill="white"]');
+        energyIndicators.forEach((indicator) => {
+          const pulseAnimation = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+          pulseAnimation.setAttribute('attributeName', 'r');
+          pulseAnimation.setAttribute('values', '2.5;2;2.5');
+          pulseAnimation.setAttribute('dur', '2s');
+          pulseAnimation.setAttribute('repeatCount', 'indefinite');
+          indicator.appendChild(pulseAnimation);
         });
       } catch (error) {
         console.error("Error accessing SVG content:", error);

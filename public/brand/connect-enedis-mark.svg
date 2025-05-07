@@ -1,24 +1,34 @@
 
 <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Cleaner house icon with plug elements -->
-  <path d="M18 42V25L30 14L42 25V42H36V30H24V42H18Z" fill="#0063AF"/>
+  <!-- Cleaner house icon with plug elements - updated vibrant blue -->
+  <path d="M18 42V25L30 14L42 25V42H36V30H24V42H18Z" fill="#1EAEDB">
+    <!-- Add shine highlight -->
+    <animate attributeName="opacity" values="1;0.9;1" dur="3s" repeatCount="indefinite" />
+  </path>
   
-  <!-- Connection points (outlets) with rounded corners -->
-  <rect x="26" y="32" width="8" height="4" rx="1.5" fill="#94C11F"/>
-  <rect x="26" y="37" width="8" height="4" rx="1.5" fill="#94C11F"/>
+  <!-- Connection points (outlets) with rounded corners - updated vibrant green -->
+  <rect x="26" y="32" width="8" height="4" rx="1.5" fill="#50C878">
+    <animate attributeName="opacity" values="1;0.8;1" dur="2s" repeatCount="indefinite" />
+  </rect>
   
-  <!-- Circular power indicator -->
-  <circle cx="30" cy="22" r="2.5" fill="#94C11F" opacity="0.8"/>
+  <rect x="26" y="37" width="8" height="4" rx="1.5" fill="#50C878">
+    <animate attributeName="opacity" values="1;0.8;1" dur="2.5s" repeatCount="indefinite" />
+  </rect>
   
-  <!-- Dynamic flowing wire -->
+  <!-- Circular power indicator - updated color -->
+  <circle cx="30" cy="22" r="2.5" fill="#FFD600" opacity="0.9">
+    <animate attributeName="opacity" values="0.9;0.7;0.9" dur="1.5s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Dynamic flowing wire - enhanced gradient -->
   <path d="M45 32C48 32 50 30 53 30" stroke="url(#flow-gradient)" strokeWidth="3" strokeLinecap="round"/>
   
-  <!-- Gradient definition -->
+  <!-- Enhanced gradient definition -->
   <defs>
     <linearGradient id="flow-gradient" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#0063AF"/>
-      <stop offset="50%" stop-color="#5DA8E0"/>
-      <stop offset="100%" stop-color="#94C11F"/>
+      <stop offset="0%" stop-color="#1EAEDB"/>
+      <stop offset="50%" stop-color="#33C3F0"/>
+      <stop offset="100%" stop-color="#50C878"/>
     </linearGradient>
   </defs>
 </svg>

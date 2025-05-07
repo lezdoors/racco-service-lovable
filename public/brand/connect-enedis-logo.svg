@@ -1,24 +1,24 @@
 
 <svg width="240" height="60" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- House icon with plug elements -->
-  <path d="M20 40V25L30 15L40 25V40H35V30H25V40H20Z" fill="#0063AF"/>
+  <!-- House icon with plug elements - updated colors -->
+  <path d="M20 40V25L30 15L40 25V40H35V30H25V40H20Z" fill="#1EAEDB"/>
   
-  <!-- Connection points (outlets) -->
-  <rect x="27" y="31" width="6" height="3" rx="1" fill="#94C11F"/>
-  <rect x="27" y="35" width="6" height="3" rx="1" fill="#94C11F"/>
+  <!-- Connection points (outlets) - updated colors -->
+  <rect x="27" y="31" width="6" height="3" rx="1" fill="#50C878"/>
+  <rect x="27" y="35" width="6" height="3" rx="1" fill="#50C878"/>
   
-  <!-- Dynamic flowing wire -->
+  <!-- Dynamic flowing wire - enhanced gradient -->
   <path d="M45 30C50 30 55 25 65 25C75 25 80 35 90 35" stroke="url(#flow-gradient)" strokeWidth="2.5" strokeLinecap="round"/>
   
-  <!-- Small power grid pattern -->
-  <path opacity="0.1" d="M88 15h20v20h-20z" stroke="#0063AF" strokeWidth="0.5" strokeDasharray="2 2"/>
+  <!-- Small power grid pattern - updated color -->
+  <path opacity="0.15" d="M88 15h20v20h-20z" stroke="#1EAEDB" strokeWidth="0.5" strokeDasharray="2 2"/>
   
-  <!-- Text styling with custom font -->
+  <!-- Text styling with custom font - updated colors -->
   <text x="100" y="35" 
         font-family="'Montserrat', sans-serif" 
         font-size="24" 
         font-weight="600" 
-        fill="#0063AF">
+        fill="#1EAEDB">
     Connect
   </text>
   
@@ -26,16 +26,19 @@
         font-family="'Montserrat', sans-serif" 
         font-size="24" 
         font-weight="600" 
-        fill="#94C11F">
+        fill="#50C878">
     Enedis
   </text>
   
-  <!-- Gradient definition for flowing wire -->
+  <!-- Energy spark - new visual element -->
+  <path d="M92 25L89 28L93 28L91 32" stroke="#FFD600" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" class="animate-pulse"/>
+  
+  <!-- Enhanced gradient definition for flowing wire -->
   <defs>
     <linearGradient id="flow-gradient" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#0063AF"/>
-      <stop offset="50%" stop-color="#5DA8E0"/>
-      <stop offset="100%" stop-color="#94C11F"/>
+      <stop offset="0%" stop-color="#1EAEDB"/>
+      <stop offset="50%" stop-color="#33C3F0"/>
+      <stop offset="100%" stop-color="#50C878"/>
     </linearGradient>
   </defs>
 </svg>

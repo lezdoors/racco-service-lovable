@@ -1,10 +1,7 @@
-
 import React from "react";
 import { Phone, Mail, Clock } from "lucide-react";
-
 const ContactSection = () => {
-  return (
-    <section id="contact" className="py-16 bg-white relative">
+  return <section id="contact" className="py-16 bg-white relative">
       <div className="absolute inset-0 opacity-5 bg-pattern-light"></div>
       <div className="container mx-auto px-4 relative">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -33,7 +30,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h3 className="font-playfair font-medium">Email</h3>
-                  <p className="text-gray-600">contact@racco-service.com</p>
+                  <p className="text-gray-600">contact@raccordement-connect.com</p>
                 </div>
               </div>
 
@@ -58,52 +55,29 @@ const ContactSection = () => {
                   <label htmlFor="name" className="block text-sm fr-label mb-1">
                     Nom
                   </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="fr-input w-full"
-                    placeholder="Votre nom"
-                  />
+                  <input type="text" id="name" className="fr-input w-full" placeholder="Votre nom" />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm fr-label mb-1">
                     Email
                   </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="fr-input w-full"
-                    placeholder="Votre email"
-                  />
+                  <input type="email" id="email" className="fr-input w-full" placeholder="Votre email" />
                 </div>
               </div>
               <div>
                 <label htmlFor="subject" className="block text-sm fr-label mb-1">
                   Sujet
                 </label>
-                <input
-                  type="text"
-                  id="subject"
-                  className="fr-input w-full"
-                  placeholder="Sujet du message"
-                />
+                <input type="text" id="subject" className="fr-input w-full" placeholder="Sujet du message" />
               </div>
               <div>
                 <label htmlFor="message" className="block text-sm fr-label mb-1">
                   Message
                 </label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  className="fr-input w-full"
-                  placeholder="Votre message"
-                ></textarea>
+                <textarea id="message" rows={4} className="fr-input w-full" placeholder="Votre message"></textarea>
               </div>
               <div>
-                <button
-                  type="submit"
-                  className="w-full px-4 py-2 bg-france-navy text-white font-medium rounded-md hover:bg-blue-900 transition-colors"
-                >
+                <button type="submit" className="w-full px-4 py-2 bg-france-navy text-white font-medium rounded-md hover:bg-blue-900 transition-colors">
                   Envoyer le message
                 </button>
               </div>
@@ -111,8 +85,6 @@ const ContactSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ContactSection;

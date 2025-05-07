@@ -1,50 +1,24 @@
 
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
-  <!-- House Silhouette -->
-  <g transform="translate(50, 50) scale(0.8)">
-    <path d="M200,50 L50,150 L50,300 L350,300 L350,150 Z" fill="#f0f0f0" stroke="#333333" stroke-width="8"/>
-    <rect x="150" y="200" width="100" height="100" fill="#f0f0f0" stroke="#333333" stroke-width="6"/>
-  </g>
+<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cleaner house icon with plug elements -->
+  <path d="M18 42V25L30 14L42 25V42H36V30H24V42H18Z" fill="#0063AF"/>
   
-  <!-- Light Bulb -->
-  <g transform="translate(200, 120)">
-    <!-- Bulb Base -->
-    <rect x="-30" y="60" width="60" height="25" fill="#777" rx="5" ry="5"/>
-    <rect x="-20" y="85" width="40" height="15" fill="#555" rx="3" ry="3"/>
-    
-    <!-- Bulb -->
-    <ellipse cx="0" cy="0" rx="50" ry="60" fill="#FFF9C4" stroke="#E0D084" stroke-width="3"/>
-    
-    <!-- Filament -->
-    <path d="M0,50 C-15,30 15,10 0,-10 C-15,-30 15,-50 0,-50" fill="none" stroke="#E0D084" stroke-width="3"/>
-    
-    <!-- Electric Rays -->
-    <g stroke="#FFEB3B" stroke-width="2">
-      <path d="M-48,-5 L-65,-15" />
-      <path d="M-45,-25 L-60,-45" />
-      <path d="M-30,-50 L-35,-70" />
-      <path d="M0,-60 L0,-80" />
-      <path d="M30,-50 L35,-70" />
-      <path d="M45,-25 L60,-45" />
-      <path d="M48,-5 L65,-15" />
-    </g>
-    
-    <!-- Glow Effect -->
-    <circle cx="0" cy="0" r="70" fill="url(#glow)" opacity="0.5"/>
-  </g>
+  <!-- Connection points (outlets) with rounded corners -->
+  <rect x="26" y="32" width="8" height="4" rx="1.5" fill="#94C11F"/>
+  <rect x="26" y="37" width="8" height="4" rx="1.5" fill="#94C11F"/>
   
-  <!-- Cable & Plug -->
-  <path d="M220,220 C280,270 300,270 350,220" fill="none" stroke="#333333" stroke-width="8" stroke-linecap="round"/>
+  <!-- Circular power indicator -->
+  <circle cx="30" cy="22" r="2.5" fill="#94C11F" opacity="0.8"/>
   
-  <!-- Electric Symbol -->
-  <path d="M300,120 L320,160 L290,160 L310,200" fill="none" stroke="#FFD600" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Lightning element -->
+  <path d="M45 32C48 32 50 30 53 30" stroke="url(#flow-gradient)" stroke-width="3" stroke-linecap="round"/>
   
-  <!-- Definitions -->
+  <!-- Gradient definition -->
   <defs>
-    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5" fx="0.5" fy="0.5">
-      <stop offset="0%" stop-color="#FFEB3B" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#FFEB3B" stop-opacity="0"/>
-    </radialGradient>
+    <linearGradient id="flow-gradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0063AF"/>
+      <stop offset="50%" stop-color="#5DA8E0"/>
+      <stop offset="100%" stop-color="#94C11F"/>
+    </linearGradient>
   </defs>
 </svg>

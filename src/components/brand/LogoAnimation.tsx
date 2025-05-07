@@ -28,14 +28,35 @@ const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
         if (!svgDoc) return;
 
         // Find and animate elements in the SVG
-        const lightBulb = svgDoc.querySelector('ellipse[fill="#FFF9C4"]');
-        if (lightBulb) {
-          lightBulb.classList.add('animate-pulse');
+        const wirePath = svgDoc.querySelector('path[stroke="url(#flow-gradient)"], path[stroke="#0063AF"], path[stroke="white"]');
+        if (wirePath) {
+          // Add a pulsing animation to the wire
+          wirePath.setAttribute('stroke-dasharray', '4,2');
+          wirePath.setAttribute('class', 'animate-pulse');
         }
         
-        const electricRays = svgDoc.querySelectorAll('path[stroke="#FFD600"], path[stroke="white"]');
-        electricRays.forEach(ray => {
-          ray.classList.add('animate-pulse');
+        // Animate lightning elements if they exist
+        const lightningElements = svgDoc.querySelectorAll('path[class="animate-pulse"]');
+        lightningElements.forEach(el => {
+          // Add more dynamic animation
+          el.setAttribute('opacity', '0.8');
+          const animation = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+          animation.setAttribute('attributeName', 'opacity');
+          animation.setAttribute('values', '0.8;0.4;0.8');
+          animation.setAttribute('dur', '2s');
+          animation.setAttribute('repeatCount', 'indefinite');
+          el.appendChild(animation);
+        });
+        
+        // Animate power outlets
+        const outlets = svgDoc.querySelectorAll('rect[fill="#94C11F"], rect[fill="white"]');
+        outlets.forEach((outlet, index) => {
+          const animation = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+          animation.setAttribute('attributeName', 'opacity');
+          animation.setAttribute('values', '1;0.7;1');
+          animation.setAttribute('dur', `${1.5 + index * 0.5}s`);
+          animation.setAttribute('repeatCount', 'indefinite');
+          outlet.appendChild(animation);
         });
       } catch (error) {
         console.error("Error accessing SVG content:", error);
@@ -45,7 +66,7 @@ const LogoAnimation = forwardRef<HTMLDivElement, LogoAnimationProps>(({
 
   const logoPath = `/brand/${
     variant === 'full' ? 'sre-connect-logo' :
-    variant === 'mono' ? 'sre-connect-logo' :
+    variant === 'mono' ? 'sre-connect-logo-mono' :
     variant === 'white' ? 'sre-connect-logo-white' :
     'sre-connect-mark'
   }.svg`;

@@ -1,12 +1,19 @@
+
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin } from "lucide-react";
+import LogoAnimation from "../brand/LogoAnimation";
+
 const CustomFooter = () => {
   return <footer className="bg-enedis-gray-800 text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="mb-6">
-              <img src="/brand/sre-connect-logo-white.svg" alt="Service Raccordement Electricité" className="h-24 w-auto" />
+              <LogoAnimation 
+                variant="white" 
+                className="h-24 w-auto" 
+                animate={false}
+              />
             </div>
             <p className="mb-4 text-sm">
               Facilitateur de raccordement Enedis. Service professionnel pour tous vos besoins de raccordement électrique.

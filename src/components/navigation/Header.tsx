@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import LogoAnimation from "../brand/LogoAnimation";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,19 +32,11 @@ const Header = () => {
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
             <div className="h-16 w-auto">
-              {isScrolled ? (
-                <img 
-                  src="/brand/sre-connect-logo.svg" 
-                  alt="Service Raccordement Electricité" 
-                  className="h-full w-auto"
-                />
-              ) : (
-                <img 
-                  src="/brand/sre-connect-logo-white.svg" 
-                  alt="Service Raccordement Electricité" 
-                  className="h-full w-auto"
-                />
-              )}
+              <LogoAnimation 
+                variant={isScrolled ? "full" : "white"} 
+                className="h-full w-auto transition-all duration-300"
+                animate={true}
+              />
             </div>
           </Link>
 

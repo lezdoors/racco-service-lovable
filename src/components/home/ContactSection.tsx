@@ -19,7 +19,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h3 className="font-playfair font-medium">Téléphone</h3>
-                  <p className="text-gray-600">+33 9 70 83 19 70</p>
+                  <p className="text-gray-600">09 70 70 95 70</p>
                   <p className="text-sm text-gray-500">Du lundi au vendredi, 8h-18h</p>
                 </div>
               </div>
@@ -30,7 +30,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h3 className="font-playfair font-medium">Email</h3>
-                  <p className="text-gray-600">contact@raccordement-connect.com</p>
+                  <p className="text-gray-600">contact@raccordement-elec.fr</p>
                 </div>
               </div>
 
